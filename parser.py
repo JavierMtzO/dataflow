@@ -1,45 +1,60 @@
 import ply.yacc as yacc
 from lexer import tokens
+from Semantics.semantics import Semantics
+
+semantics = Semantics()
 
 def p_PROGRAM(p):
     '''
-    PROGRAM : PROG ';' VARS_PRIME FUNCTION_PRIME VOID MAIN '{' VARS_PRIME BLOCK '}'
+    PROGRAM : PROG add_type ID add_id ';' save_id VARS_PRIME FUNCTION_PRIME VOID MAIN '{' VARS_PRIME BLOCK '}'
     '''
     pass
+
+def p_add_id(p):
+    '''add_id : '''
+    semantics.add_id(p[-1])
+
+def p_add_type(p):
+    '''add_type : '''
+    semantics.add_type(p[-1])
+
+def p_save_id(p):
+    '''save_id : '''
+    semantics.save_id()
 
 def p_VARS_PRIME(p):
     '''
     VARS_PRIME : VARS
-               | EMPTY
+               | empty
     '''
     pass
 
 def p_FUNCTION_PRIME(p):
     '''
     FUNCTION_PRIME : FUNCTION FUNC_PRIME
-                   | EMPTY
+                   | empty
     '''
     pass
 
 def p_FUNC(p):
     '''
     FUNC_PRIME : FUNCTION FUNC_PRIME
-         | EMPTY
+         | empty
     '''
     pass
 
 def p_VARS(p):
     '''
     VARS : VAR TIPO_COMP ID TIPO_PRIME ';'
-         | TIPO_SIMPLE ID ';'
-         | TIPO_SIMPLE ID '[' I_CONST ']' ';'
+         | VAR TIPO_SIMPLE ID ';'
+         | VAR TIPO_SIMPLE ID '[' I_CONST ']' ';'
     '''
     pass
 
 def p_TIPO_PRIME(p):
     '''
     TIPO_PRIME : ',' ID TIPO_PRIME
-               | EMPTY
+               | empty
     '''
     pass
 
@@ -75,21 +90,21 @@ def p_FUNCTION(p):
 def p_PARAM(p):
     '''
     PARAM : TIPO_SIMPLE ID PARAM_PRIME
-          | EMPTY
+          | empty
     '''
     pass
 
 def p_PARAM_PRIME(p):
     '''
     PARAM_PRIME : ',' TIPO_SIMPLE ID PARAM_PRIME
-                | EMPTY
+                | empty
     '''
     pass
 
 def p_BLOCK(p):
     '''
     BLOCK : STATEMENT BLOCK
-          | EMPTY
+          | empty
     '''
     pass
 
@@ -97,7 +112,7 @@ def p_STATEMENT(p):
     '''
     STATEMENT : ASSIGNATION
               | FUNC_CALL
-              | PRINT_STMT
+              | WRITE
               | CONDITION
               | WHILE_STMT
               | FOR_STMT
@@ -120,22 +135,22 @@ def p_FUNC_CALL(p):
 def p_FUNC_CALL_PRIME(p):
     '''
     FUNC_CALL_PRIME : EXPRESSION FUNC_CALL_PRIME
-                    | EMPTY
+                    | empty
     '''
     pass
 
-def p_PRINT_STMT(p):
+def p_WRITE(p):
     '''
-    PRINT_STMT : PRINT '(' EXPRESSION PRINT_PRIME ')'
-               | PRINT '(' TITLE PRINT_PRIME ')'
+    WRITE : PRINT '(' EXPRESSION WRITE_PRIME ')'
+               | PRINT '(' TITLE WRITE_PRIME ')'
     '''
     pass
 
-def p_PRINT_PRIME(p):
+def p_WRITE_PRIME(p):
     '''
-    PRINT_PRIME : ',' EXPRESSION PRINT_PRIME
-                | ',' TITLE PRINT_PRIME
-                | EMPTY
+    WRITE_PRIME : ',' EXPRESSION WRITE_PRIME
+                | ',' TITLE WRITE_PRIME
+                | empty
     '''
     pass
 
@@ -148,7 +163,7 @@ def p_CONDITION(p):
 def p_ELSE_STMT(p):
     '''
     ELSE_STMT : ELSE '{' BLOCK '}'
-              | EMPTY
+              | empty
     '''
     pass
 
@@ -179,7 +194,7 @@ def p_EXPRESSION(p):
 def p_EXPRESSION_PRIME(p):
     '''
     EXPRESSION_PRIME : OR AND_EXP EXPRESSION_PRIME
-                     | EMPTY
+                     | empty
     '''
     pass
 
@@ -192,7 +207,7 @@ def p_AND_EXP(p):
 def p_AND_EXP_PRIME(p):
     '''
     AND_EXP_PRIME : AND B_EXP AND_EXP_PRIME
-                  | EMPTY
+                  | empty
     '''
     pass
 
@@ -210,7 +225,7 @@ def p_B_EXP_PRIME(p):
                 | '<'
                 | DIFFERENT
                 | EQUAL
-                | EMPTY
+                | empty
     '''
     pass
 
@@ -224,7 +239,7 @@ def p_EXP_PRIME(p):
     '''
     EXP_PRIME : '+' TERM EXP_PRIME
               | '-' TERM EXP_PRIME
-              | EMPTY
+              | empty
     '''
     pass
 
@@ -238,7 +253,7 @@ def p_TERM_PRIME(p):
     '''
     TERM_PRIME : '*' FACTOR TERM_PRIME
                   | '/' FACTOR TERM_PRIME
-                  | EMPTY
+                  | empty
     '''
     pass
 
@@ -264,5 +279,21 @@ def p_VAR_CT(p):
 def p_error(p):
     print("Syntax error in input!")
 
+def p_empty(p):
+    'empty :'
+    pass
+
 # Build the parser
 parser = yacc.yacc()
+
+input_str = f"""program patito; var int myvariable; void main {{ }}"""
+print(input_str)
+parser.parse(input_str) 
+print(f'id_queue: {semantics.id_queue}')
+print(f'types_stack: {semantics.types_stack}')
+print(f'operands_stack: {semantics.operands_stack}')
+print(f'operators_stack: {semantics.operators_stack}')
+i = 0
+for quad in semantics.quadruples:
+    print(f'{i}. {quad}')
+    i += 1

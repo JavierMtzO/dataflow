@@ -10,8 +10,8 @@
 
 - **Estado:**
 
-    Lexer - COMPLETO y FUNCIONANDO
+    Lexer - Completo
 
-    Parser - COMPLETO y FUNCIONANDO.
+    Parser - Completo
 
 <br>

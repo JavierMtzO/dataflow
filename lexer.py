@@ -25,7 +25,7 @@ reserved = {
 }
 
 tokens = (
-    'DIFFERENT', 'EQUAL', 'AND', 'OR', 'EMPTY', 'I_CONST', 'F_CONST', 'C_CONST', 'ID'
+    'DIFFERENT', 'EQUAL', 'AND', 'OR', 'I_CONST', 'F_CONST', 'C_CONST', 'ID'
 )   + tuple(reserved.values())
 
 # literal symbols
@@ -37,7 +37,6 @@ t_DIFFERENT = r'\!\='
 t_EQUAL = r'\=\='
 t_AND = r'\&\&'
 t_OR = r'\|\|'
-t_EMPTY = r'\bε\b'
 
 #  Complex tokens
 
