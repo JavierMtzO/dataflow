@@ -14,4 +14,20 @@
 
     Parser - Completo
 
+## Avance 2
+---
+- **Fecha:** 06/Mayo/2023
+
+- **Descripción:** Inicialización de semántica, tabla de variables, cubo semántico y cuádruplos
+
+- **Estado:**
+
+    Semantics - Inicializado
+
+    Tabla de variables - Inicializado
+
+    Cubo semántico - Terminado
+
+    Cuádruplos - Incializado
+
 <br>
