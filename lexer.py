@@ -40,14 +40,14 @@ t_OR = r'\|\|'
 
 #  Complex tokens
 
-def t_I_CONST(t):
-    r'-?\d+'
-    t.value = int(t.value)
-    return t
-
 def t_F_CONST(t):
     r'-?\d+\.\d+'
     t.value = float(t.value)
+    return t
+
+def t_I_CONST(t):
+    r'-?\d+'
+    t.value = int(t.value)
     return t
 
 def t_C_CONST(t):
@@ -80,17 +80,21 @@ def t_error(t):
 lexer = lex.lex()
 
 ################  TEST  ################
-# data = '''
-# for counter = 65 to 67 do { counter = counter + 1 }
-# '''
+data = f""" 
+program patito; 
+var int i, x, o; 
+var float k, l;
+void main {{ 
+    i = 1.8;
+}} """
 
-# lexer.input(data)
+lexer.input(data)
 
-# # Tokenize
-# while True:
-#     tok = lexer.token()
-#     if not tok: 
-#         break 
-#     print(tok)
+# Tokenize
+while True:
+    tok = lexer.token()
+    if not tok: 
+        break 
+    print(tok)
 
 #############################################

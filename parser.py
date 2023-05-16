@@ -6,7 +6,7 @@ semantics = Semantics()
 
 def p_PROGRAM(p):
     '''
-    PROGRAM : PROG add_type ID add_id ';' save_id VARS_PRIME FUNCTION_PRIME VOID MAIN '{' VARS_PRIME BLOCK '}'
+    PROGRAM : PROG add_type ID add_id ';' save_ids VARS_PRIME FUNCTION_PRIME VOID MAIN '{' VARS_PRIME BLOCK '}'
     '''
     pass
 
@@ -14,17 +14,13 @@ def p_add_id(p):
     '''add_id : '''
     semantics.add_id(p[-1])
 
-def p_add_type(p):
-    '''add_type : '''
-    semantics.add_type(p[-1])
-
-def p_save_id(p):
-    '''save_id : '''
-    semantics.save_id()
+def p_save_ids(p):
+    '''save_ids : '''
+    semantics.save_ids()
 
 def p_VARS_PRIME(p):
     '''
-    VARS_PRIME : VARS
+    VARS_PRIME : VARS VARS_PRIME
                | empty
     '''
     pass
@@ -43,33 +39,46 @@ def p_FUNC(p):
     '''
     pass
 
+def p_add_type(p):
+    '''add_type : '''
+    semantics.add_type(p[-1], True)
+
+def p_add_current_type(p):
+    '''add_current_type : '''
+    semantics.add_type(semantics.current_type, False)
+
 def p_VARS(p):
     '''
-    VARS : VAR TIPO_COMP ID TIPO_PRIME ';'
-         | VAR TIPO_SIMPLE ID ';'
-         | VAR TIPO_SIMPLE ID '[' I_CONST ']' ';'
+    VARS : VAR TIPO_COMP ID add_id TIPO_PRIME ';' save_ids
+         | VAR TIPO_SIMPLE ID add_id TIPO_PRIME ';' save_ids
+         | VAR TIPO_SIMPLE ID '[' EXPRESSION ']' ';'
+         | VAR TIPO_SIMPLE ID '[' EXPRESSION ']' '[' EXPRESSION ']' ';'
     '''
     pass
 
 def p_TIPO_PRIME(p):
     '''
-    TIPO_PRIME : ',' ID TIPO_PRIME
+    TIPO_PRIME : ',' ID add_id add_current_type TIPO_PRIME
                | empty
     '''
     pass
 
+def p_get_variable(p):
+    '''get_variable : '''
+    semantics.get_variable(p[-1])
+
 def p_VARIABLE(p):
     '''
-    VARIABLE : ID
+    VARIABLE : ID get_variable
              | ID '[' EXPRESSION ']'
     '''
     pass
 
 def p_TIPO_SIMPLE(p):
     '''
-    TIPO_SIMPLE : INT
-                | FLOAT
-                | CHAR
+    TIPO_SIMPLE : INT add_type
+                | FLOAT add_type
+                | CHAR add_type
     '''
     pass
 
@@ -120,9 +129,21 @@ def p_STATEMENT(p):
     '''
     pass
 
+def p_add_operator(p):
+    '''add_operator : '''
+    semantics.add_operator(p[-1]) 
+
+def p_add_operand(p):
+    '''add_operand : '''
+    semantics.add_operand(p[-1])
+
+def p_add_assignation_quad(p):
+    '''add_assignation_quad : '''
+    semantics.assignment_quad()
+
 def p_ASSIGNATION(p):
     '''
-    ASSIGNATION : VARIABLE '=' EXPRESSION
+    ASSIGNATION : VARIABLE '=' add_operator EXPRESSION ';' add_assignation_quad
     '''
     pass
 
@@ -269,9 +290,9 @@ def p_FACTOR(p):
 def p_VAR_CT(p):
     '''
     VAR_CT : ID
-           | I_CONST
-           | F_CONST
-           | C_CONST
+           | I_CONST add_operand
+           | F_CONST add_operand
+           | C_CONST add_operand
     '''
     pass
 
@@ -286,7 +307,16 @@ def p_empty(p):
 # Build the parser
 parser = yacc.yacc()
 
-input_str = f"""program patito; var int myvariable; void main {{ }}"""
+input_str = f""" 
+program patito; 
+var int i, x, o; 
+var float k, l;
+void main {{ 
+    i = 1;
+    o = 4;
+    k = 3.9;
+}} 
+"""
 print(input_str)
 parser.parse(input_str) 
 print(f'id_queue: {semantics.id_queue}')
@@ -295,5 +325,5 @@ print(f'operands_stack: {semantics.operands_stack}')
 print(f'operators_stack: {semantics.operators_stack}')
 i = 0
 for quad in semantics.quadruples:
-    print(f'{i}. {quad}')
-    i += 1
+    print(f'{i}. {quad.print_quadruple()}')
+    i+=1

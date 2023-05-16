@@ -14,3 +14,11 @@ class Variables_Table:
         if name in self.variables_table:
             raise Exception('Identifier is already declared!')
         self.variables_table[name] = Variables_Table_Initiation(types[type])
+    
+    def lookup_variable(self, name: str) -> bool:
+        if name not in self.variables_table:
+            return False
+        return True
+    
+    def get_type(self, name: str) -> str:
+        return self.variables_table[name]
