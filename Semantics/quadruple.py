@@ -1,15 +1,15 @@
 from Semantics.semantic_cube import operations
 
 quadruple_operations = operations | {
-    'goto': 50,
-    'gotot': 51,
-    'gotof': 52,
-    'print': 53,
+    'goto' : 'goto',
+    'gotot': 'gotot',
+    'gotof': 'gotof',
+    'print': 'print',
 }
 
 class Quadruple:
     
-    def __init__(self, operation: str, result: int, left_operand: int = None, right_operand: int = None) -> None:
+    def __init__(self, operation: str, result: int = None, left_operand: int = None, right_operand: int = None) -> None:
         if operation not in quadruple_operations:
             raise Exception('Unkown operation on quadruple')
         self.op_code = quadruple_operations[operation]

@@ -122,7 +122,7 @@ def p_STATEMENT(p):
     STATEMENT : ASSIGNATION
               | FUNC_CALL
               | EXPRESSION ';'
-              | WRITE
+              | WRITE ';'
               | CONDITION
               | WHILE_STMT
               | FOR_STMT
@@ -142,9 +142,14 @@ def p_add_assignation_quad(p):
     '''add_assignation_quad : '''
     semantics.assignment_quad()
 
+def p_add_assignation_for_quad(p):
+    '''add_assignation_for_quad : '''
+    semantics.assignment_quad(is_for=True)
+
 def p_ASSIGNATION(p):
     '''
     ASSIGNATION : VARIABLE '=' add_operator EXPRESSION ';' add_assignation_quad
+                | FOR VARIABLE '=' add_operator EXPRESSION add_assignation_for_quad
     '''
     pass
 
@@ -184,15 +189,31 @@ def p_WRITE_PRIME(p):
     '''
     pass
 
+def p_go_to_false_quad(p):
+    '''go_to_false_quad : '''
+    semantics.go_to_false_quad() 
+
+def p_fill_go_to_false_quad(p):
+    '''fill_go_to_false_quad : '''
+    semantics.fill_go_to_false_quad() 
+
+def p_go_to_true_quad(p):
+    '''go_to_true_quad : '''
+    semantics.go_to_true_quad() 
+
+def p_fill_go_to_true_quad(p):
+    '''fill_go_to_true_quad : '''
+    semantics.fill_go_to_true_quad() 
+
 def p_CONDITION(p):
     '''
-    CONDITION : IF '(' EXPRESSION ')' '{' BLOCK '}' ELSE_STMT
+    CONDITION : IF '(' EXPRESSION ')' '{' go_to_false_quad BLOCK '}' fill_go_to_false_quad ELSE_STMT
     '''
     pass
 
 def p_ELSE_STMT(p):
     '''
-    ELSE_STMT : ELSE '{' BLOCK '}'
+    ELSE_STMT : ELSE '{' go_to_true_quad BLOCK '}' fill_go_to_true_quad
               | empty
     '''
     pass
@@ -203,9 +224,30 @@ def p_WHILE_STMT(p):
     '''
     pass
 
+def p_check_exact_type_for(p):
+    '''check_exact_type_for : '''
+    semantics.check_exact_type_for(type='int') 
+
+def p_add_final_counter_for(p):
+    '''add_final_counter_for : '''
+    semantics.add_final_counter_for()
+
+def p_generate_for_quad(p):
+    '''generate_for_quad : '''
+    semantics.generate_for_quad()
+
+def p_check_boolean_expression_for(p):
+    '''check_boolean_expression_for : '''
+    semantics.check_boolean_expression_for()
+
+def p_end_for(p):
+    '''end_for : '''
+    semantics.end_for()
+
 def p_FOR_STMT(p):
     '''
-    FOR_STMT : FOR ID '=' EXPRESSION TO EXPRESSION DO '{' BLOCK '}'
+    FOR_STMT : ASSIGNATION check_exact_type_for TO '(' EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ')' generate_for_quad DO '{' BLOCK '}' end_for
+             | FOR ID get_variable check_exact_type_for TO '(' EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ')' generate_for_quad DO '{' BLOCK '}' end_for
     '''
     pass
 
@@ -321,29 +363,40 @@ def p_empty(p):
 parser = yacc.yacc()
 
 ######### TEST #############
-input_str = f""" 
+input_str = """ 
 program patito; 
-var int i, x, o; 
+var int i, x, o, j; 
 var float k, l;
-void main {{ 
+void main {
     x = 1 + (4 + 2 * 3 - 2) * 4 + 5;
     i = 1;
     o = i + 4 + x;
     k = 3 + 6 / 2 * (4 + 1) / o;
-    print(k)
-    print(x, o)
-}} 
+    print(k) ;
+    print(x, o) ;
+    if(x > o){
+        o = 5 + 8 ;
+    } else {
+        o = 3 + 6 ;
+    }
+    for j = 1 to (4) do {
+        j = o + 1;
+    }
+}
 """
 parser.parse(input_str) 
-# print(f'id_queue: {semantics.id_queue}')
-# print(f'types_stack: {semantics.types_stack}')
-# print(f'operands_stack: {semantics.operands_stack}')
-# print(f'operators_stack: {semantics.operators_stack}')
-# print('Quadruples:')
-# i = 0
-# for quad in semantics.quadruples:
-#     print(f'{i}. {quad.print_quadruple()}')
-#     i+=1
-# print('Variables table:')
-# semantics.variables_table.print_variables_table()
+print(f'id_queue: {semantics.id_queue}')
+print(f'types_stack: {semantics.types_stack}')
+print(f'operands_stack: {semantics.operands_stack}')
+print(f'operators_stack: {semantics.operators_stack}')
+print(f'for_vc_stack: {semantics.for_vc_stack}')
+print(f'for_vf_stack: {semantics.for_vf_stack}')
+print(f'jumps_stack: {semantics.jumps_stack}')
+print('Quadruples:')
+i = 0
+for quad in semantics.quadruples:
+    print(f'{i}. {quad.print_quadruple()}')
+    i+=1
+print('Variables table:')
+semantics.variables_table.print_variables_table()
 ############################

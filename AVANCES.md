@@ -47,4 +47,12 @@
     Cambio de tabla de variables a un pandas DataFrame - Completo
 
     Agregar cuádruplo de Escritura - Completo
+
+- **Fecha:** 17/Mayo/2023
+
+- **Descripción:** Inicialización de generación de cuádruplos para Condiciones y Loops
+
+- **Estado:**
+
+    IF y FOR - Empezados. Falta probar más a profundidad
 <br>
