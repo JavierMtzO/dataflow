@@ -12,7 +12,7 @@
 
     Parser - Completo
 
-- **Fecha:** 06/Mayo/2023
+- **Fecha:** 07/Mayo/2023
 
 - **Descripción:** Inicialización de semántica, tabla de variables, cubo semántico y cuádruplos
 
@@ -45,4 +45,6 @@
     Generación de cuádruplos de aritmética asociativa a la derecha - Completo
 
     Cambio de tabla de variables a un pandas DataFrame - Completo
+
+    Agregar cuádruplo de Escritura - Completo
 <br>

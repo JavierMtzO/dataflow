@@ -34,8 +34,12 @@ class Semantics:
         self.operators_stack.append(operator)
     
     def add_operand(self, operand) -> None:
+        operand_type = type(operand).__name__
+        if operand_type == 'str':
+            operand_type = self.variables_table.get_type(operand)
+            operand = self.variables_table.get_value(operand)
         self.operands_stack.append(operand)
-        self.types_stack.append(type(operand).__name__)
+        self.types_stack.append(operand_type)
     
     def save_ids(self) -> None:
         while len(self.id_queue) > 0:
@@ -64,7 +68,7 @@ class Semantics:
         self.variables_table.change_variable_value(result, left_operand)
         self.append_quad(quadruple)
     
-    def artimetic_operation(self) -> None:
+    def aritmetics_operation(self) -> None:
         # Get operands, types and operator
         right_operand = self.operands_stack.pop()
         right_operand_type = self.types_stack.pop()
@@ -74,7 +78,7 @@ class Semantics:
         # Generate new temporal variable
         temporal_variable = f"t{self.temp_variables_counter}"
         temp_var_type = self.semantic_cube.match_types(left_operand_type, right_operand_type, operator)
-        expression = f"{temp_var_type}({left_operand} {operator} {right_operand})"
+        expression = f"{left_operand} {operator} {right_operand}"
         self.temp_variables[temporal_variable] = eval(expression)
         self.temp_variables_counter += 1
         # Append temporal variable to operand stack and type stack
@@ -83,4 +87,14 @@ class Semantics:
         # Generate quadruple
         quadruple = Quadruple(operation=operator, left_operand=left_operand, right_operand = right_operand ,result=temporal_variable)
         self.append_quad(quadruple)
+
+    def print_quad(self) -> None:
+        operand = self.operands_stack.pop()
+        operator = self.operators_stack.pop()
+        self.types_stack.pop()
+        print(operand)
+        quadruple = Quadruple(operation=operator,result=operand)
+        self.append_quad(quadruple)
+
+
 

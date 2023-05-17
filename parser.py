@@ -161,17 +161,25 @@ def p_FUNC_CALL_PRIME(p):
     '''
     pass
 
+def p_print_quad(p):
+    '''print_quad : '''
+    semantics.print_quad()
+
+def p_add_print_operator(p):
+    '''add_print_operator : '''
+    semantics.add_operator('print') 
+
 def p_WRITE(p):
     '''
-    WRITE : PRINT '(' EXPRESSION WRITE_PRIME ')'
-               | PRINT '(' TITLE WRITE_PRIME ')'
+    WRITE : PRINT add_operator '(' EXPRESSION print_quad WRITE_PRIME ')'
+               | PRINT add_operator '(' TITLE WRITE_PRIME ')'
     '''
     pass
 
 def p_WRITE_PRIME(p):
     '''
-    WRITE_PRIME : ',' EXPRESSION WRITE_PRIME
-                | ',' TITLE WRITE_PRIME
+    WRITE_PRIME : ',' add_print_operator EXPRESSION print_quad WRITE_PRIME
+                | ',' add_print_operator TITLE print_quad WRITE_PRIME
                 | empty
     '''
     pass
@@ -207,9 +215,9 @@ def p_DESCRIBE_STMT(p):
     '''
     pass
 
-def p_artimetic_operation(p):
-    '''artimetic_operation : '''
-    semantics.artimetic_operation()
+def p_aritmetics_operation(p):
+    '''aritmetics_operation : '''
+    semantics.aritmetics_operation()
 
 def p_EXPRESSION(p):
     '''
@@ -247,10 +255,10 @@ def p_B_EXP(p):
 
 def p_B_EXP_PRIME(p):
     '''
-    B_EXP_PRIME : '>' add_operator B_EXP artimetic_operation
-                | '<' add_operator B_EXP artimetic_operation
-                | DIFFERENT add_operator B_EXP artimetic_operation
-                | EQUAL add_operator B_EXP artimetic_operation
+    B_EXP_PRIME : '>' add_operator B_EXP aritmetics_operation
+                | '<' add_operator B_EXP aritmetics_operation
+                | DIFFERENT add_operator B_EXP aritmetics_operation
+                | EQUAL add_operator B_EXP aritmetics_operation
                 | empty
     '''
     pass
@@ -263,8 +271,8 @@ def p_EXP(p):
 
 def p_EXP_PRIME(p):
     '''
-    EXP_PRIME : '+' add_operator TERM EXP_PRIME artimetic_operation
-              | '-' add_operator TERM EXP_PRIME artimetic_operation
+    EXP_PRIME : '+' add_operator TERM EXP_PRIME aritmetics_operation
+              | '-' add_operator TERM EXP_PRIME aritmetics_operation
               | empty
     '''
     pass
@@ -277,8 +285,8 @@ def p_TERM(p):
 
 def p_TERM_PRIME(p):
     '''
-    TERM_PRIME : '*' add_operator FACTOR artimetic_operation TERM_PRIME 
-                  | '/' add_operator FACTOR artimetic_operation TERM_PRIME 
+    TERM_PRIME : '*' add_operator FACTOR aritmetics_operation TERM_PRIME 
+                  | '/' add_operator FACTOR aritmetics_operation TERM_PRIME 
                   | empty
     '''
     pass
@@ -294,7 +302,7 @@ def p_FACTOR(p):
 
 def p_VAR_CT(p):
     '''
-    VAR_CT : ID
+    VAR_CT : ID add_operand
            | I_CONST add_operand
            | F_CONST add_operand
            | C_CONST add_operand
@@ -312,7 +320,7 @@ def p_empty(p):
 # Build the parser
 parser = yacc.yacc()
 
-# 1 + (2 * 3) * 4 + 5;
+######### TEST #############
 input_str = f""" 
 program patito; 
 var int i, x, o; 
@@ -320,20 +328,22 @@ var float k, l;
 void main {{ 
     x = 1 + (4 + 2 * 3 - 2) * 4 + 5;
     i = 1;
-    o = 4;
-    k = 3.8;
+    o = i + 4 + x;
+    k = 3 + 6 / 2 * (4 + 1) / o;
+    print(k)
+    print(x, o)
 }} 
 """
-print(input_str)
 parser.parse(input_str) 
-print(f'id_queue: {semantics.id_queue}')
-print(f'types_stack: {semantics.types_stack}')
-print(f'operands_stack: {semantics.operands_stack}')
-print(f'operators_stack: {semantics.operators_stack}')
-print('Quadruples:')
-i = 0
-for quad in semantics.quadruples:
-    print(f'{i}. {quad.print_quadruple()}')
-    i+=1
-print('Variables table:')
-semantics.variables_table.print_variables_table()
+# print(f'id_queue: {semantics.id_queue}')
+# print(f'types_stack: {semantics.types_stack}')
+# print(f'operands_stack: {semantics.operands_stack}')
+# print(f'operators_stack: {semantics.operators_stack}')
+# print('Quadruples:')
+# i = 0
+# for quad in semantics.quadruples:
+#     print(f'{i}. {quad.print_quadruple()}')
+#     i+=1
+# print('Variables table:')
+# semantics.variables_table.print_variables_table()
+############################

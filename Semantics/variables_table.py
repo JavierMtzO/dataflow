@@ -31,5 +31,8 @@ class Variables_Table:
     def get_type(self, name: str) -> str:
         return self.get_variable(name).iloc[0]['Type']
     
+    def get_value(self, name: str) -> str:
+        return self.get_variable(name).iloc[0]['Value']
+    
     def print_variables_table(self):
         print(self.variables_table)
