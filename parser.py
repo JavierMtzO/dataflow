@@ -121,6 +121,7 @@ def p_STATEMENT(p):
     '''
     STATEMENT : ASSIGNATION
               | FUNC_CALL
+              | EXPRESSION ';'
               | WRITE
               | CONDITION
               | WHILE_STMT
@@ -206,6 +207,10 @@ def p_DESCRIBE_STMT(p):
     '''
     pass
 
+def p_artimetic_operation(p):
+    '''artimetic_operation : '''
+    semantics.artimetic_operation()
+
 def p_EXPRESSION(p):
     '''
     EXPRESSION : AND_EXP EXPRESSION_PRIME
@@ -242,10 +247,10 @@ def p_B_EXP(p):
 
 def p_B_EXP_PRIME(p):
     '''
-    B_EXP_PRIME : '>' 
-                | '<'
-                | DIFFERENT
-                | EQUAL
+    B_EXP_PRIME : '>' add_operator B_EXP artimetic_operation
+                | '<' add_operator B_EXP artimetic_operation
+                | DIFFERENT add_operator B_EXP artimetic_operation
+                | EQUAL add_operator B_EXP artimetic_operation
                 | empty
     '''
     pass
@@ -258,8 +263,8 @@ def p_EXP(p):
 
 def p_EXP_PRIME(p):
     '''
-    EXP_PRIME : '+' TERM EXP_PRIME
-              | '-' TERM EXP_PRIME
+    EXP_PRIME : '+' add_operator TERM EXP_PRIME artimetic_operation
+              | '-' add_operator TERM EXP_PRIME artimetic_operation
               | empty
     '''
     pass
@@ -272,8 +277,8 @@ def p_TERM(p):
 
 def p_TERM_PRIME(p):
     '''
-    TERM_PRIME : '*' FACTOR TERM_PRIME
-                  | '/' FACTOR TERM_PRIME
+    TERM_PRIME : '*' add_operator FACTOR artimetic_operation TERM_PRIME 
+                  | '/' add_operator FACTOR artimetic_operation TERM_PRIME 
                   | empty
     '''
     pass
@@ -307,14 +312,16 @@ def p_empty(p):
 # Build the parser
 parser = yacc.yacc()
 
+# 1 + (2 * 3) * 4 + 5;
 input_str = f""" 
 program patito; 
 var int i, x, o; 
 var float k, l;
 void main {{ 
+    x = 1 + (4 + 2 * 3 - 2) * 4 + 5;
     i = 1;
     o = 4;
-    k = 3.9;
+    k = 3.8;
 }} 
 """
 print(input_str)
@@ -323,7 +330,10 @@ print(f'id_queue: {semantics.id_queue}')
 print(f'types_stack: {semantics.types_stack}')
 print(f'operands_stack: {semantics.operands_stack}')
 print(f'operators_stack: {semantics.operators_stack}')
+print('Quadruples:')
 i = 0
 for quad in semantics.quadruples:
     print(f'{i}. {quad.print_quadruple()}')
     i+=1
+print('Variables table:')
+semantics.variables_table.print_variables_table()

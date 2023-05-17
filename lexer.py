@@ -80,21 +80,28 @@ def t_error(t):
 lexer = lex.lex()
 
 ################  TEST  ################
-data = f""" 
-program patito; 
-var int i, x, o; 
-var float k, l;
-void main {{ 
-    i = 1.8;
-}} """
+# data = f""" 
+# program patito; 
+# var int i, x, o; 
+# var float k, l;
+# void main {{ 
+#     4 > 3;
+#     4 || 3;
+#     4 == 3;
+#     x = 1 + (4 + 2 * 3 - 2) * 4 + 5;
+#     i = 1;
+#     o = 4;
+#     k = 3.8;
+# }} 
+# """
 
-lexer.input(data)
+# lexer.input(data)
 
-# Tokenize
-while True:
-    tok = lexer.token()
-    if not tok: 
-        break 
-    print(tok)
+# # Tokenize
+# while True:
+#     tok = lexer.token()
+#     if not tok: 
+#         break 
+#     print(tok)
 
 #############################################

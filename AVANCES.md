@@ -34,4 +34,15 @@
 
     Cuádruplos para asignación - Terminado
 
+- **Fecha:** 16/Mayo/2023
+
+- **Descripción:** Inicialización de generación de cuádruplos para aritmética
+
+- **Estado:**
+
+    Type match en asignación - Completo
+
+    Generación de cuádruplos de aritmética asociativa a la derecha - Completo
+
+    Cambio de tabla de variables a un pandas DataFrame - Completo
 <br>

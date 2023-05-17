@@ -25,6 +25,7 @@ class Semantic_Cube():
     semantic_cube = {
         'int': {
             'int': {
+                '=': types['int'],
                 '+': types['int'],
                 '-': types['int'],
                 '*': types['int'],
@@ -37,6 +38,7 @@ class Semantic_Cube():
                 '<': types['bool'],
             },
             'float': {
+                '=': 'ERROR',
                 '+': types['float'],
                 '-': types['float'],
                 '*': types['float'],
@@ -49,6 +51,7 @@ class Semantic_Cube():
                 '<': types['bool'],
             },
             'char': {
+                '=': 'ERROR',
                 '+': types['char'],
                 '-': 'ERROR',
                 '*': 'ERROR',
@@ -61,6 +64,7 @@ class Semantic_Cube():
                 '<': 'ERROR',
             },
             'bool': {
+                '=': 'ERROR',
                 '+': 'ERROR',
                 '-': 'ERROR',
                 '*': 'ERROR',
@@ -75,6 +79,7 @@ class Semantic_Cube():
         },
         'float': {
             'int': {
+                '=': types['float'],
                 '+': types['float'],
                 '-': types['float'],
                 '*': types['float'],
@@ -87,6 +92,7 @@ class Semantic_Cube():
                 '<': types['bool'],
             },
             'float': {
+                '=': types['float'],
                 '+': types['float'],
                 '-': types['float'],
                 '*': types['float'],
@@ -99,6 +105,7 @@ class Semantic_Cube():
                 '<': types['bool'],
             },
             'char': {
+                '=': 'ERROR',
                 '+': 'ERROR',
                 '-': 'ERROR',
                 '*': 'ERROR',
@@ -111,6 +118,7 @@ class Semantic_Cube():
                 '<': 'ERROR',
             },
             'bool': {
+                '=': 'ERROR',
                 '+': 'ERROR',
                 '-': 'ERROR',
                 '*': 'ERROR',
@@ -125,6 +133,7 @@ class Semantic_Cube():
         },
         'char': {
             'int': {
+                '=': 'ERROR',
                 '+': 'ERROR',
                 '-': 'ERROR',
                 '*': 'ERROR',
@@ -137,6 +146,7 @@ class Semantic_Cube():
                 '<': 'ERROR',
             },
             'float': {
+                '=': 'ERROR',
                 '+': 'ERROR',
                 '-': 'ERROR',
                 '*': 'ERROR',
@@ -149,6 +159,7 @@ class Semantic_Cube():
                 '<': 'ERROR',
             },
             'char': {
+                '=': types['char'],
                 '+': types['char'],
                 '-': 'ERROR',
                 '*': 'ERROR',
@@ -161,6 +172,7 @@ class Semantic_Cube():
                 '<': 'ERROR',
             },
             'bool': {
+                '=': 'ERROR',
                 '+': 'ERROR',
                 '-': 'ERROR',
                 '*': 'ERROR',
@@ -175,6 +187,7 @@ class Semantic_Cube():
         },
         'bool': {
             'int': {
+                '=': 'ERROR',
                 '+': 'ERROR',
                 '-': 'ERROR',
                 '*': 'ERROR',
@@ -187,6 +200,7 @@ class Semantic_Cube():
                 '<': 'ERROR',
             },
             'float': {
+                '=': 'ERROR',
                 '+': 'ERROR',
                 '-': 'ERROR',
                 '*': 'ERROR',
@@ -199,6 +213,7 @@ class Semantic_Cube():
                 '<': 'ERROR',
             },
             'char': {
+                '=': 'ERROR',
                 '+': 'ERROR',
                 '-': 'ERROR',
                 '*': 'ERROR',
@@ -211,6 +226,7 @@ class Semantic_Cube():
                 '<': 'ERROR',
             },
             'bool': {
+                '=': types['bool'],
                 '+': 'ERROR',
                 '-': 'ERROR',
                 '*': 'ERROR',
