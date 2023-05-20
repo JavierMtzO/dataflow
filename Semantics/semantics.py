@@ -9,7 +9,6 @@ class Semantics:
     types_stack = deque()
     jumps_stack = deque()
     id_queue = deque()
-    global_variables_table = Variables_Table()
     functions_directory = Functions_Directory()
     semantic_cube = Semantic_Cube()
     temp_variables = {}
@@ -19,6 +18,9 @@ class Semantics:
     for_vc_stack = deque()
     for_vf_stack = deque()
     temp_for_counter = 1
+
+    global_variables_table = Variables_Table()
+    local_variables_table = Variables_Table()
 
 
     def add_id(self, id: str) -> None:
@@ -42,11 +44,14 @@ class Semantics:
         self.operands_stack.append(operand)
         self.types_stack.append(operand_type)
     
-    def save_ids(self) -> None:
+    def save_ids(self, is_local:bool=False) -> None:
         while len(self.id_queue) > 0:
             name = self.id_queue.pop()
             type = self.types_stack.pop()
-            self.global_variables_table.push_variable(name= name, type= type)
+            if is_local:
+                self.local_variables_table.push_variable(name= name, type= type)
+            else:
+                self.global_variables_table.push_variable(name= name, type= type)
     
     def save_function(self) -> None:
         name = self.id_queue.pop()
@@ -54,7 +59,7 @@ class Semantics:
         self.functions_directory.push_function(name=name, type=type)
     
     def get_variable(self, name: str) -> None:
-        if not self.global_variables_table.lookup_variable(name):
+        if not (self.global_variables_table.lookup_variable(name) or self.local_variables_table.lookup_variable(name)):
             raise Exception(f'{name} is not declared')
         self.operands_stack.append(name)
         self.types_stack.append(self.global_variables_table.get_type(name))
@@ -188,6 +193,12 @@ class Semantics:
     
     def print_aux(self, text:str) -> None:
         print(text)
+    
+    def empty_variables_table(self, is_local: bool = False) -> None:
+        if is_local:
+            self.local_variables_table.empty_variables_table()
+        else:
+            self.global_variables_table.empty_variables_table()
 
 
 

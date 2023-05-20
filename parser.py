@@ -6,13 +6,21 @@ semantics = Semantics()
 
 def p_PROGRAM(p):
     '''
-    PROGRAM : PROG add_type ID add_id ';' go_to_main save_function VARS_PRIME FUNCTION_PRIME VOID MAIN '{' fill_go_to_main_quad VARS_PRIME BLOCK '}'
+    PROGRAM : PROG add_type ID add_id ';' go_to_main save_function VARS_PRIME FUNCTION_PRIME VOID MAIN '{' fill_go_to_main_quad VARS_PRIME BLOCK '}' empty_global_variables_table
     '''
     pass
 
 def p_go_to_main(p):
     '''go_to_main : '''
     semantics.go_to_main()
+
+def p_empty_global_variables_table(p):
+    '''empty_global_variables_table : '''
+    semantics.empty_variables_table()
+
+def p_empty_local_variables_table(p):
+    '''empty_local_variables_table : '''
+    semantics.empty_variables_table(is_local=True)
 
 def p_fill_go_to_main_quad(p):
     '''fill_go_to_main_quad : '''
@@ -25,6 +33,10 @@ def p_add_id(p):
 def p_save_ids(p):
     '''save_ids : '''
     semantics.save_ids()
+
+def p_save_local_ids(p):
+    '''save_local_ids : '''
+    semantics.save_ids(is_local=True)
 
 def p_save_function(p):
     '''save_function : '''
@@ -102,22 +114,21 @@ def p_TIPO_COMP(p):
 
 def p_FUNCTION(p):
     '''
-    FUNCTION : FUNC TIPO_SIMPLE ID '(' PARAM ')' '{' VARS_PRIME BLOCK RETURN EXPRESSION '}'
-             | FUNC TIPO_SIMPLE ID '(' PARAM ')' '{' VARS_PRIME BLOCK RETURN VAR_CT '}'
-             | FUNC VOID ID '(' PARAM ')' '{' VARS_PRIME BLOCK '}'
+    FUNCTION : FUNC TIPO_SIMPLE add_type ID add_id save_function '(' PARAM ')' '{' VARS_PRIME BLOCK RETURN EXPRESSION '}'
+             | FUNC VOID add_type ID add_id save_function '(' PARAM ')' '{' VARS_PRIME BLOCK '}'
     '''
     pass
 
 def p_PARAM(p):
     '''
-    PARAM : TIPO_SIMPLE ID PARAM_PRIME
+    PARAM : TIPO_SIMPLE add_type ID add_id PARAM_PRIME save_local_ids
           | empty
     '''
     pass
 
 def p_PARAM_PRIME(p):
     '''
-    PARAM_PRIME : ',' TIPO_SIMPLE ID PARAM_PRIME
+    PARAM_PRIME : ',' TIPO_SIMPLE add_type ID add_id PARAM_PRIME
                 | empty
     '''
     pass
@@ -407,5 +418,5 @@ for quad in semantics.quadruples:
     print(f'{i}. {quad.print_quadruple()}')
     i+=1
 print('Variables table:')
-semantics.variables_table.print_variables_table()
+semantics.global_variables_table.print_variables_table()
 ############################

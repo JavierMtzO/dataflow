@@ -1,9 +1,13 @@
 types = {
-    'program': 'program',
     'int': 'int',
     'float': 'float',
     'char': 'char',
     'bool': 'bool',
+}
+
+function_types = types | {
+    'program': 'program',
+    'void': 'void'
 }
 
 operations = {
