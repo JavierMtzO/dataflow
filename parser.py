@@ -205,9 +205,25 @@ def p_fill_go_to_true_quad(p):
     '''fill_go_to_true_quad : '''
     semantics.fill_go_to_true_quad() 
 
+def p_go_to_quad(p):
+    '''go_to_quad : '''
+    semantics.go_to_quad() 
+
+def p_pop_operand(p):
+    '''pop_operand : '''
+    semantics.pop_operand() 
+
+def p_pop_type(p):
+    '''pop_type : '''
+    semantics.pop_type() 
+
+def p_append_jump(p):
+    '''append_jump : '''
+    semantics.append_jump() 
+
 def p_CONDITION(p):
     '''
-    CONDITION : IF '(' EXPRESSION ')' '{' go_to_false_quad BLOCK '}' fill_go_to_false_quad ELSE_STMT
+    CONDITION : IF '(' EXPRESSION pop_operand pop_type ')' '{' go_to_false_quad BLOCK '}' fill_go_to_false_quad ELSE_STMT
     '''
     pass
 
@@ -220,7 +236,7 @@ def p_ELSE_STMT(p):
 
 def p_WHILE_STMT(p):
     '''
-    WHILE_STMT : WHILE '(' EXPRESSION ')' '{' BLOCK '}'
+    WHILE_STMT : WHILE '(' append_jump EXPRESSION pop_operand pop_type ')' '{' go_to_false_quad  BLOCK '}' fill_go_to_false_quad go_to_quad
     '''
     pass
 
@@ -247,7 +263,6 @@ def p_end_for(p):
 def p_FOR_STMT(p):
     '''
     FOR_STMT : ASSIGNATION check_exact_type_for TO '(' EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ')' generate_for_quad DO '{' BLOCK '}' end_for
-             | FOR ID get_variable check_exact_type_for TO '(' EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ')' generate_for_quad DO '{' BLOCK '}' end_for
     '''
     pass
 
@@ -353,7 +368,7 @@ def p_VAR_CT(p):
 
 # Error rule for syntax errors
 def p_error(p):
-    print("Syntax error in input!")
+    raise Exception(f'Syntax error in input!')
 
 def p_empty(p):
     'empty :'
@@ -363,28 +378,9 @@ def p_empty(p):
 parser = yacc.yacc()
 
 ######### TEST #############
-input_str = """ 
-program patito; 
-var int i, x, o, j; 
-var float k, l;
-void main {
-    x = 1 + (4 + 2 * 3 - 2) * 4 + 5;
-    i = 1;
-    o = i + 4 + x;
-    k = 3 + 6 / 2 * (4 + 1) / o;
-    print(k) ;
-    print(x, o) ;
-    if(x > o){
-        o = 5 + 8 ;
-    } else {
-        o = 3 + 6 ;
-    }
-    for j = 1 to (4) do {
-        j = o + 1;
-    }
-}
-"""
-parser.parse(input_str) 
+with open('./Pruebas/sample_program.df', 'r') as file:
+    dataflow_file = file.read()
+parser.parse(dataflow_file) 
 print(f'id_queue: {semantics.id_queue}')
 print(f'types_stack: {semantics.types_stack}')
 print(f'operands_stack: {semantics.operands_stack}')

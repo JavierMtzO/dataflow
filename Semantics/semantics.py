@@ -81,8 +81,12 @@ class Semantics:
         # Generate new temporal variable
         temporal_variable = f"t{self.temp_variables_counter}"
         temp_var_type = self.semantic_cube.match_types(left_operand_type, right_operand_type, operator)
-        expression = f"{left_operand} {operator} {right_operand}"
-        self.temp_variables[temporal_variable] = eval(expression)
+        # TESTING #
+        # expression = f"{left_operand} {operator} {right_operand}"
+        # self.temp_variables[temporal_variable] = eval(expression)
+        ###########
+        self.temp_variables[temporal_variable] = temporal_variable
+
         self.temp_variables_counter += 1
         # Append temporal variable to operand stack and type stack
         self.operands_stack.append(self.temp_variables[temporal_variable])
@@ -155,7 +159,16 @@ class Semantics:
         self.for_vc_stack.pop()
         self.fill_go_to_false_quad()
         self.go_to_quad()
-
+    
+    def pop_operand(self) -> None:
+        self.operands_stack.pop()
+    def pop_type(self) -> None:
+        self.types_stack.pop()
+    def append_jump(self) -> None:
+        self.jumps_stack.append(self.quadruple_counter)
+    
+    def print_aux(self, text:str) -> None:
+        print(text)
 
 
 

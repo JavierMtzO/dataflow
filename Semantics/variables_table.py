@@ -23,11 +23,15 @@ class Variables_Table:
         return name in self.variables_table['Name'].values
     
     def get_variable(self, name: str) -> pd.DataFrame:
-        return self.variables_table[self.variables_table['Name'] == name]
+        variable = self.variables_table[self.variables_table['Name'] == name]
+        if not variable.empty:
+            return variable
+        else:
+            raise Exception(f'Identifier "{name}" has not been declared!')
     
     def change_variable_value(self, name: str, new_value) -> None:
         self.variables_table.loc[self.variables_table['Name'] == name, 'Value'] = new_value
-    
+        
     def get_type(self, name: str) -> str:
         return self.get_variable(name).iloc[0]['Type']
     

@@ -55,4 +55,12 @@
 - **Estado:**
 
     IF y FOR - Empezados. Falta probar más a profundidad
+
+- **Fecha:** 19/Mayo/2023
+
+- **Descripción:** Terminar de generar los cuádruplos para WHILE
+
+- **Estado:**
+
+    WHILE - Cuádruplos generados.
 <br>

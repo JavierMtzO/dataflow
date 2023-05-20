@@ -1,0 +1,25 @@
+program patito; 
+var int i, x, o, j, y; 
+var float k, l;
+void main {
+    x = 1 + (4 + 2 * 3 - 2) * 4 + 5;
+    i = 1;
+    o = i + 4 + x;
+    k = 3 + 6 / 2 * (4 + 1) / o;
+    print(k) ;
+    print(x, o) ;
+    if(x + 3 - 5 > o + 60 - 5){
+        o = 5 + 8 ;
+    } else {
+        o = 3 + 6 ;
+    }
+    while( x > i){
+        i = i + 1;
+    }
+    for j = 1 to (4) do {
+        for j = 1 to (6) do {
+            j = o + 1;
+        }
+    }
+    y = 3 + 9 ;
+}
