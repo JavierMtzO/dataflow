@@ -6,9 +6,17 @@ semantics = Semantics()
 
 def p_PROGRAM(p):
     '''
-    PROGRAM : PROG add_type ID add_id ';' save_ids VARS_PRIME FUNCTION_PRIME VOID MAIN '{' VARS_PRIME BLOCK '}'
+    PROGRAM : PROG add_type ID add_id ';' go_to_main save_function VARS_PRIME FUNCTION_PRIME VOID MAIN '{' fill_go_to_main_quad VARS_PRIME BLOCK '}'
     '''
     pass
+
+def p_go_to_main(p):
+    '''go_to_main : '''
+    semantics.go_to_main()
+
+def p_fill_go_to_main_quad(p):
+    '''fill_go_to_main_quad : '''
+    semantics.fill_go_to_main_quad()
 
 def p_add_id(p):
     '''add_id : '''
@@ -17,6 +25,10 @@ def p_add_id(p):
 def p_save_ids(p):
     '''save_ids : '''
     semantics.save_ids()
+
+def p_save_function(p):
+    '''save_function : '''
+    semantics.save_function()
 
 def p_VARS_PRIME(p):
     '''
@@ -161,7 +173,7 @@ def p_FUNC_CALL(p):
 
 def p_FUNC_CALL_PRIME(p):
     '''
-    FUNC_CALL_PRIME : EXPRESSION FUNC_CALL_PRIME
+    FUNC_CALL_PRIME : ',' EXPRESSION FUNC_CALL_PRIME
                     | empty
     '''
     pass
@@ -378,7 +390,8 @@ def p_empty(p):
 parser = yacc.yacc()
 
 ######### TEST #############
-with open('./Pruebas/sample_program.df', 'r') as file:
+file = 'functions_program' + '.df'
+with open(f'./Pruebas/{file}', 'r') as file:
     dataflow_file = file.read()
 parser.parse(dataflow_file) 
 print(f'id_queue: {semantics.id_queue}')

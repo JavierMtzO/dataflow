@@ -1,6 +1,27 @@
 import pandas as pd
 from Semantics.semantic_cube import types
 
+class Functions_Directory:
+    def __init__(self) -> None:
+        columns = ['Name', 'Type', 'Dir', 'Variables Table']
+        self.functions_directory = pd.DataFrame(columns=columns)
+
+    def push_function(self, name: str, type: str) -> None:
+        if type not in types:
+            raise Exception(f'Unknown type: "{type}"')
+        if self.lookup_function(name):
+            raise Exception(f'Identifier "{name}" is already declared!')
+        new_function = pd.DataFrame(
+            {
+                'Name': name,
+                'Type': type,
+            }, index=[0])
+        self.functions_directory = pd.concat([self.functions_directory, new_function], ignore_index=True)
+        print(self.functions_directory)
+    
+    def lookup_function(self, name: str) -> bool:
+        return name in self.functions_directory['Name'].values
+
 class Variables_Table:
     def __init__(self) -> None:
         columns = ['Name', 'Type', 'Value']

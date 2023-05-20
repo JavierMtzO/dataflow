@@ -1,0 +1,11 @@
+program patito; 
+var int i, x, o, j, y; 
+var float k, l;
+
+func void uno(int l, int j) {
+    l = 4 + 4;
+    b = b + 2;
+}
+void main {
+    i = 3;
+}

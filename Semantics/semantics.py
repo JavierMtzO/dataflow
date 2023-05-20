@@ -1,5 +1,5 @@
 from collections import deque
-from Semantics.variables_table import Variables_Table
+from Semantics.variables_table import Variables_Table, Functions_Directory
 from Semantics.quadruple import Quadruple
 from Semantics.semantic_cube import Semantic_Cube
 
@@ -9,7 +9,8 @@ class Semantics:
     types_stack = deque()
     jumps_stack = deque()
     id_queue = deque()
-    variables_table = Variables_Table()
+    global_variables_table = Variables_Table()
+    functions_directory = Functions_Directory()
     semantic_cube = Semantic_Cube()
     temp_variables = {}
     temp_variables_counter = 1
@@ -36,8 +37,8 @@ class Semantics:
     def add_operand(self, operand) -> None:
         operand_type = type(operand).__name__
         if operand_type == 'str':
-            operand_type = self.variables_table.get_type(operand)
-            operand = self.variables_table.get_value(operand)
+            operand_type = self.global_variables_table.get_type(operand)
+            operand = self.global_variables_table.get_value(operand)
         self.operands_stack.append(operand)
         self.types_stack.append(operand_type)
     
@@ -45,13 +46,18 @@ class Semantics:
         while len(self.id_queue) > 0:
             name = self.id_queue.pop()
             type = self.types_stack.pop()
-            self.variables_table.push_variable(name= name, type= type)
+            self.global_variables_table.push_variable(name= name, type= type)
+    
+    def save_function(self) -> None:
+        name = self.id_queue.pop()
+        type = self.types_stack.pop()
+        self.functions_directory.push_function(name=name, type=type)
     
     def get_variable(self, name: str) -> None:
-        if not self.variables_table.lookup_variable(name):
+        if not self.global_variables_table.lookup_variable(name):
             raise Exception(f'{name} is not declared')
         self.operands_stack.append(name)
-        self.types_stack.append(self.variables_table.get_type(name))
+        self.types_stack.append(self.global_variables_table.get_type(name))
 
     def append_quad(self, quadruple: Quadruple) -> None:
         self.quadruples.append(quadruple)
@@ -65,7 +71,7 @@ class Semantics:
         result = self.operands_stack.pop()
         result_type = self.semantic_cube.match_types(variable_type, operand_type, operator)
         quadruple = Quadruple(operation=operator, left_operand=left_operand, result=result)
-        self.variables_table.change_variable_value(result, left_operand)
+        self.global_variables_table.change_variable_value(result, left_operand)
         self.append_quad(quadruple)
         if is_for:
             self.for_vc_stack.append(result)
@@ -111,6 +117,19 @@ class Semantics:
         index = self.jumps_stack.pop()
         self.quadruples[index].result = self.quadruple_counter + jumps
     
+    def go_to_main(self) -> None:
+        self.jumps_stack.append(self.quadruple_counter)
+        quadruple = Quadruple(operation="goto")
+        self.append_quad(quadruple)
+
+    def fill_go_to_main_quad(self,  jumps:int=1) -> None:
+        index = self.jumps_stack.pop()
+        self.quadruples[index].result = self.quadruple_counter
+
+    def fill_go_to_false_quad(self,  jumps:int=1) -> None:
+        index = self.jumps_stack.pop()
+        self.quadruples[index].result = self.quadruple_counter + jumps
+    
     def go_to_true_quad(self) -> None:
         self.jumps_stack.append(self.quadruple_counter)
         quadruple = Quadruple(operation="gotot")
@@ -136,7 +155,7 @@ class Semantics:
     def check_boolean_expression_for(self) -> tuple[str,str,str]:
         vf = self.for_vf_stack.pop()
         vc_var = self.for_vc_stack.pop()
-        vc = self.variables_table.get_value(vc_var)
+        vc = self.global_variables_table.get_value(vc_var)
         operator = '<'
         self.for_vf_stack.append(vf)
         self.for_vc_stack.append(vc_var)
