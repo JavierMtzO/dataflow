@@ -58,11 +58,15 @@
 
 - **Fecha:** 19/Mayo/2023
 
-- **Descripción:** Terminar de generar los cuádruplos para WHILE
+- **Descripción:** Terminar de generar los cuádruplos para WHILE, IF y FOR
 
 - **Estado:**
 
     WHILE - Cuádruplos generados.
+
+    IF - Cuádruplos generados.
+
+    FOR - Cuádruplos generados.
 
 - **Fecha:** 20/Mayo/2023
 
@@ -71,5 +75,7 @@
 - **Estado:**
 
     Funciones - Cuádruplos generados
+
     Llamadas de funciones - Cuádruplos generados.
+    
 <br>
