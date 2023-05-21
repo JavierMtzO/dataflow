@@ -49,7 +49,7 @@ class VirtualMemory():
     temp_bool_range = [ BOOL_START + (DATATYPE_SIZE * 3),  BOOL_START + (DATATYPE_SIZE * 4) - 1]
     temp_bool_counter = temp_bool_range[0]
 
-    # Assign global addresses
+    # Assign global variable addresses
     def assign_global_address_int(self):
         if self.global_int_counter > self.global_int_range[1]:
             raise Exception('Global integers exceeded')
@@ -136,6 +136,35 @@ class VirtualMemory():
         self.temp_bool_counter += 1
         return address
     
+    # Assign local addresses
+    def assign_local_address_int(self):
+        if self.local_int_counter > self.local_int_range[1]:
+            raise Exception('Local ints exceeded')
+        address = self.local_int_counter
+        self.local_int_counter += 1
+        return address
+    
+    def assign_local_address_float(self):
+        if self.local_float_counter > self.local_float_range[1]:
+            raise Exception('Local floats exceeded')
+        address = self.local_float_counter
+        self.local_float_counter += 1
+        return address
+    
+    def assign_local_address_char(self):
+        if self.local_char_counter > self.local_char_range[1]:
+            raise Exception('Local chars exceeded')
+        address = self.local_char_counter
+        self.local_char_counter += 1
+        return address
+    
+    def assign_local_address_bool(self):
+        if self.local_bool_counter > self.local_bool_range[1]:
+            raise Exception('Local booleans exceeded')
+        address = self.local_bool_counter
+        self.local_bool_counter += 1
+        return address
+    
     def assign_virtual_address(self, type: str, is_const: bool = False, is_global: bool = False, is_temp: bool = False) -> int:
         if type == types['int']:
             if is_const:
@@ -144,6 +173,8 @@ class VirtualMemory():
                 return self.assign_temp_address_int()
             elif is_global:
                 return self.assign_global_address_int()
+            else:
+                return self.assign_local_address_int()
         elif type == types['float']:
             if is_const:
                 return self.assign_constant_address_float()
@@ -151,6 +182,8 @@ class VirtualMemory():
                 return self.assign_temp_address_float()
             elif is_global:
                 return self.assign_global_address_float()
+            else:
+                return self.assign_local_address_float()
         elif type == types['char']:
             if is_const:
                 return self.assign_constant_address_char()
@@ -158,6 +191,8 @@ class VirtualMemory():
                 return self.assign_temp_address_char()
             elif is_global:
                 return self.assign_global_address_char()
+            else:
+                return self.assign_local_address_char()
         elif type == types['bool']:
             if is_const:
                 return self.assign_constant_address_bool()
@@ -165,6 +200,8 @@ class VirtualMemory():
                 return self.assign_temp_address_bool()
             elif is_global:
                 return self.assign_global_address_bool()
+            else:
+                return self.assign_local_address_bool()
         else:
             raise Exception(f'Type: {type} was not recognized in virtual memory')  
         
