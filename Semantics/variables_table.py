@@ -25,8 +25,21 @@ class Functions_Directory:
     def get_type(self, name: str) -> str:
         return self.get_current_function(name).iloc[0]['Type']
     
-    def get_current_function(self) -> str:
-        return self.functions_directory['Name'].iloc[-1]
+    def get_variables_types_used(self, name: str) -> str:
+        return self.get_current_function(name).iloc[0]['Variables types used']
+    
+    def get_parameters(self, name: str) -> str:
+        return self.get_current_function(name).iloc[0]['Parameters']
+    
+    def get_dir(self, name: str) -> str:
+        return self.get_current_function(name).iloc[0]['Dir']
+    
+    def get_current_function(self, name:str=None) -> str:
+        if name is not None:
+            func = self.functions_directory[self.functions_directory['Name'] == name]
+            return func
+        else:
+            return self.functions_directory['Name'].iloc[-1]
     
     def push_variables_types_used(self, name:str ,types_array: str) -> None:
         self.functions_directory.loc[self.functions_directory['Name'] == name, 'Variables types used'] = types_array 

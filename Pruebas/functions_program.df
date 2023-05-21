@@ -15,4 +15,5 @@ func int dos(int s, float r) {
 }
 void main {
     i = 3;
+    uno(5 + 4 - 2 , 6 - 3) ;
 }

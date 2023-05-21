@@ -2,6 +2,7 @@ from collections import deque
 from Semantics.variables_table import Variables_Table, Functions_Directory
 from Semantics.quadruple import Quadruple
 from Semantics.semantic_cube import Semantic_Cube
+import ast
 
 class Semantics:
     operands_stack = deque()
@@ -253,6 +254,33 @@ class Semantics:
             print("Global Variables Table: ")
             self.global_variables_table.print_variables_table()
             self.global_variables_table.empty_variables_table()
+    
+    def era_quad(self, current_function:str) -> None:
+        current_function = current_function
+        if self.functions_directory.lookup_function(name=current_function):
+            resources = self.functions_directory.get_variables_types_used(current_function)
+            quadruple = Quadruple(operation='era', result=resources)
+            self.append_quad(quadruple)
+            # Get parameters string, convert it to list and finally to a deque
+            self.parameters_stack = deque(ast.literal_eval(self.functions_directory.get_parameters(current_function)))
+            self.function_dir = self.functions_directory.get_dir(current_function)
+        else:
+            raise Exception(f'Function "{current_function}" has not been declared!')
+    
+    def param_quad(self) -> None:
+        original_parameter_type = self.parameters_stack.popleft()
+        current_parameter_type = self.types_stack.pop()
+        operand = self.operands_stack.pop()
+        if original_parameter_type != current_parameter_type:
+            raise Exception(f'Try to call a parameter of type "{current_parameter_type}" when a parameter of {original_parameter_type} is required')
+        quadruple = Quadruple(operation='param', left_operand=operand)
+        self.append_quad(quadruple)
+    
+    def go_sub_quad(self) -> None:
+        quadruple = Quadruple(operation='gosub', result=self.function_dir)
+        self.append_quad(quadruple)
+
+
 
 
 

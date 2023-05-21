@@ -70,5 +70,6 @@
 
 - **Estado:**
 
-    Funciones - Cuádruplos iniciales generados.
+    Funciones - Cuádruplos generados
+    Llamadas de funciones - Cuádruplos generados.
 <br>

@@ -6,12 +6,15 @@ quadruple_operations = operations | {
     'gotof': 'gotof',
     'print': 'print',
     'endfunc':'endfunc',
+    'era': 'era',
+    'gosub': 'gosub',
+    'param': 'param',
 
 }
 
 class Quadruple:
     
-    def __init__(self, operation: str, result: int = None, left_operand: int = None, right_operand: int = None) -> None:
+    def __init__(self, operation: str, left_operand: int = None, right_operand: int = None, result: int = None) -> None:
         if operation not in quadruple_operations:
             raise Exception('Unkown operation on quadruple')
         self.op_code = quadruple_operations[operation]

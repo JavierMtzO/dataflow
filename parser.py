@@ -188,15 +188,27 @@ def p_ASSIGNATION(p):
     '''
     pass
 
+def p_era_quad(p):
+    '''era_quad : '''
+    semantics.era_quad(p[-1])
+
+def p_param_quad(p):
+    '''param_quad : '''
+    semantics.param_quad()
+
+def p_go_sub_quad(p):
+    '''go_sub_quad : '''
+    semantics.go_sub_quad()
+
 def p_FUNC_CALL(p):
     '''
-    FUNC_CALL : ID '(' EXPRESSION FUNC_CALL_PRIME ')'
+    FUNC_CALL : ID era_quad '(' EXPRESSION param_quad FUNC_CALL_PRIME ')' ';' go_sub_quad
     '''
     pass
 
 def p_FUNC_CALL_PRIME(p):
     '''
-    FUNC_CALL_PRIME : ',' EXPRESSION FUNC_CALL_PRIME
+    FUNC_CALL_PRIME : ',' EXPRESSION param_quad FUNC_CALL_PRIME
                     | empty
     '''
     pass
