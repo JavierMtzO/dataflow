@@ -181,10 +181,15 @@ def p_add_assignation_for_quad(p):
     '''add_assignation_for_quad : '''
     semantics.assignment_quad(is_for=True)
 
+def p_functions_assignation(p):
+    '''functions_assignation : '''
+    semantics.functions_assignation()
+
 def p_ASSIGNATION(p):
     '''
     ASSIGNATION : VARIABLE '=' add_operator EXPRESSION ';' add_assignation_quad
                 | FOR VARIABLE '=' add_operator EXPRESSION add_assignation_for_quad
+                | VARIABLE '=' add_operator FUNC_CALL functions_assignation add_assignation_quad
     '''
     pass
 
@@ -202,7 +207,7 @@ def p_go_sub_quad(p):
 
 def p_FUNC_CALL(p):
     '''
-    FUNC_CALL : ID era_quad '(' EXPRESSION param_quad FUNC_CALL_PRIME ')' ';' go_sub_quad
+    FUNC_CALL : FUNC ID era_quad '(' EXPRESSION param_quad FUNC_CALL_PRIME ')' ';' go_sub_quad
     '''
     pass
 
@@ -422,23 +427,4 @@ def p_empty(p):
     pass
 
 # Build the parser
-parser = yacc.yacc()
-
-######### TEST #############
-file = 'functions_program' + '.df'
-with open(f'./Pruebas/{file}', 'r') as file:
-    dataflow_file = file.read()
-parser.parse(dataflow_file) 
-print(f'id_queue: {semantics.id_queue}')
-print(f'types_stack: {semantics.types_stack}')
-print(f'operands_stack: {semantics.operands_stack}')
-print(f'operators_stack: {semantics.operators_stack}')
-print(f'for_vc_stack: {semantics.for_vc_stack}')
-print(f'for_vf_stack: {semantics.for_vf_stack}')
-print(f'jumps_stack: {semantics.jumps_stack}')
-print('Quadruples:')
-i = 0
-for quad in semantics.quadruples:
-    print(f'{i}. {quad.print_quadruple()}')
-    i+=1
-############################
+dataflow_parser = yacc.yacc()

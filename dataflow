@@ -1,0 +1,26 @@
+#!/usr/bin/env python
+from sys import argv
+from parser import dataflow_parser, semantics
+
+
+if __name__ == '__main__':
+    filename = argv[1]
+    if filename[-3:] != ".df":
+        raise Exception("Cannot read file without \'.df\' extension")
+    else:
+        file = open(filename)
+        input_str = file.read()
+        file.close()
+        dataflow_parser.parse(input_str)
+        print(f'id_queue: {semantics.id_queue}')
+        print(f'types_stack: {semantics.types_stack}')
+        print(f'operands_stack: {semantics.operands_stack}')
+        print(f'operators_stack: {semantics.operators_stack}')
+        print(f'for_vc_stack: {semantics.for_vc_stack}')
+        print(f'for_vf_stack: {semantics.for_vf_stack}')
+        print(f'jumps_stack: {semantics.jumps_stack}')
+        print('Quadruples:')
+        i = 0
+        for quad in semantics.quadruples:
+            print(f'{i}. {quad.print_quadruple()}')
+            i+=1

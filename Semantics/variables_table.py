@@ -25,6 +25,9 @@ class Functions_Directory:
     def get_type(self, name: str) -> str:
         return self.get_current_function(name).iloc[0]['Type']
     
+    def get_name(self, name: str) -> str:
+        return self.get_current_function(name).iloc[0]['Name']
+    
     def get_variables_types_used(self, name: str) -> str:
         return self.get_current_function(name).iloc[0]['Variables types used']
     
@@ -52,10 +55,10 @@ class Functions_Directory:
 
 class Variables_Table:
     def __init__(self) -> None:
-        columns = ['Name', 'Type']
+        columns = ['Name', 'Type', 'Kind', 'Virtual Direction']
         self.variables_table = pd.DataFrame(columns=columns)
 
-    def push_variable(self, name: str, type: str) -> None:
+    def push_variable(self, name: str, type: str, kind: str, virtual_direction: str) -> None:
         if type not in types:
             raise Exception(f'Unknown type: "{type}"')
         if self.lookup_variable(name):
@@ -64,6 +67,8 @@ class Variables_Table:
             {
                 'Name': name,
                 'Type': type,
+                'Kind': kind,
+                'Virtual Direction': virtual_direction,
             }, index=[0])
         self.variables_table = pd.concat([self.variables_table, new_variable], ignore_index=True)
     

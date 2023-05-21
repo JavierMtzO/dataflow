@@ -55,7 +55,13 @@ class Semantics:
                     operand_type = self.local_variables_table.get_type(operand)
             else:
                 raise Exception(f'Variable "{operand}" has not been declared!')
-
+        else:
+            operand = str(operand)
+            if not self.global_variables_table.lookup_variable(operand):
+                if self.current_scope == "global":
+                    self.global_variables_table.push_variable(name=operand, type=operand_type, kind='const', virtual_direction='0')
+                elif self.current_scope == "local":
+                    self.local_variables_table.push_variable(name=operand, type=operand_type, kind='const', virtual_direction='0')
         self.operands_stack.append(operand)
         self.types_stack.append(operand_type)
     
@@ -64,11 +70,11 @@ class Semantics:
             name = self.id_queue.pop()
             type = self.types_stack.pop()
             if self.current_scope == "local":
-                self.local_variables_table.push_variable(name= name, type= type)
+                self.local_variables_table.push_variable(name= name, type= type, kind='var', virtual_direction='0')
                 if is_parameter:
                     self.parameters_list.append(type)
             else:
-                self.global_variables_table.push_variable(name= name, type= type)
+                self.global_variables_table.push_variable(name= name, type= type, kind='var', virtual_direction='0')
     
     def save_function(self) -> None:
         name = self.id_queue.pop()
@@ -87,7 +93,7 @@ class Semantics:
         name = self.functions_directory.get_current_function()
         if expressions_type != function_type:
             raise Exception(f'Function "{name}" is declared as a {function_type} and it is returning {expressions_type}')
-        self.global_variables_table.push_variable(name=name, type=expressions_type)
+        self.global_variables_table.push_variable(name=name, type=expressions_type, kind='var', virtual_direction='0')
         quadruple = Quadruple(operation=operator, left_operand=operand, result=name)
         self.append_quad(quadruple)
 
@@ -134,9 +140,9 @@ class Semantics:
         temp_var_type = self.semantic_cube.match_types(left_operand_type, right_operand_type, operator)
         self.temp_variables[temporal_variable] = temporal_variable
         if self.current_scope == "local":
-            self.local_variables_table.push_variable(name=temporal_variable, type=temp_var_type)
+            self.local_variables_table.push_variable(name=temporal_variable, type=temp_var_type, kind='temp', virtual_direction='0')
         if self.current_scope == "global":
-            self.global_variables_table.push_variable(name=temporal_variable, type=temp_var_type)
+            self.global_variables_table.push_variable(name=temporal_variable, type=temp_var_type, kind='temp', virtual_direction='0')
         self.temp_variables_counter += 1
         # Append temporal variable to operand stack and type stack
         self.operands_stack.append(self.temp_variables[temporal_variable])
@@ -198,19 +204,16 @@ class Semantics:
     
     def check_boolean_expression_for(self) -> tuple[str,str,str]:
         vf = self.for_vf_stack.pop()
-        vc_var = self.for_vc_stack.pop()
-        vc = self.global_variables_table.get_value(vc_var)
+        vc = self.for_vc_stack.pop()
         operator = '<'
         self.for_vf_stack.append(vf)
-        self.for_vc_stack.append(vc_var)
+        self.for_vc_stack.append(vc)
         return vc,vf,operator
     
     def generate_for_quad(self) -> None:
         vc,vf,operator = self.check_boolean_expression_for()
         # Generate new temporal variable
         temporal_variable = f"vf{self.temp_for_counter}"
-        expression = f"{vc} {operator} {vf}"
-        self.temp_variables[temporal_variable] = eval(expression)
         self.temp_for_counter += 1
         quadruple = Quadruple(operation=operator, left_operand=vc, right_operand = vf ,result=temporal_variable)
         self.append_quad(quadruple)
@@ -243,7 +246,7 @@ class Semantics:
     
     def empty_variables_table(self, is_local: bool = False) -> None:
         if is_local:
-            print("Local Variables Table: ")
+            print(f"Local Variables Table for function {self.functions_directory.get_current_function()}: ")
             self.end_function()
             self.local_variables_table.print_variables_table()
             self.local_variables_table.empty_variables_table()
@@ -256,7 +259,7 @@ class Semantics:
             self.global_variables_table.empty_variables_table()
     
     def era_quad(self, current_function:str) -> None:
-        current_function = current_function
+        self.current_function = current_function
         if self.functions_directory.lookup_function(name=current_function):
             resources = self.functions_directory.get_variables_types_used(current_function)
             quadruple = Quadruple(operation='era', result=resources)
@@ -279,6 +282,20 @@ class Semantics:
     def go_sub_quad(self) -> None:
         quadruple = Quadruple(operation='gosub', result=self.function_dir)
         self.append_quad(quadruple)
+    
+    def functions_assignation(self) -> None:
+        variable = self.operands_stack.pop()
+        variable_type = self.types_stack.pop()
+        function_name = self.functions_directory.get_name(self.current_function)
+        function_type = self.functions_directory.get_type(self.current_function)
+        if variable_type != function_type:
+            raise Exception(f'Cannot assign "{variable_type}" to function of type {function_type}')
+        self.operands_stack.append(variable)
+        self.operands_stack.append(function_name)
+        self.types_stack.append(variable_type)
+        self.types_stack.append(function_type)
+
+
 
 
 
