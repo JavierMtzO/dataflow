@@ -63,4 +63,12 @@
 - **Estado:**
 
     WHILE - Cuádruplos generados.
+
+- **Fecha:** 20/Mayo/2023
+
+- **Descripción:** Empezar a generar los cuádruplos necesarios para funciones
+
+- **Estado:**
+
+    Funciones - Cuádruplos iniciales generados.
 <br>

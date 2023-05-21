@@ -2,9 +2,16 @@ program patito;
 var int i, x, o, j, y; 
 var float k, l;
 
-func void uno(int l, int j) {
-    l = 4 + 4;
+func void uno(int l, int b) {
+    var int h;
+    h = 8;
+    l = x + 4.9 + h;
     b = b + 2;
+}
+func int dos(int s, float r) {
+    var int z;
+    z = s + 4;
+    return z + s - 2;
 }
 void main {
     i = 3;

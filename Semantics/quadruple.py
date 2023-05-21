@@ -5,6 +5,7 @@ quadruple_operations = operations | {
     'gotot': 'gotot',
     'gotof': 'gotof',
     'print': 'print',
+    'endfunc':'endfunc',
 
 }
 

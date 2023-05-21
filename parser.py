@@ -34,9 +34,9 @@ def p_save_ids(p):
     '''save_ids : '''
     semantics.save_ids()
 
-def p_save_local_ids(p):
-    '''save_local_ids : '''
-    semantics.save_ids(is_local=True)
+def p_save_parameter(p):
+    '''save_parameter : '''
+    semantics.save_ids(is_parameter=True)
 
 def p_save_function(p):
     '''save_function : '''
@@ -112,23 +112,35 @@ def p_TIPO_COMP(p):
     '''
     pass
 
+def p_add_function_type(p):
+    '''add_function_type : '''
+    semantics.add_function_type()
+
+def p_save_function_as_global_variable(p):
+    '''save_function_as_global_variable : '''
+    semantics.save_function_as_global_variable()
+
 def p_FUNCTION(p):
     '''
-    FUNCTION : FUNC TIPO_SIMPLE add_type ID add_id save_function '(' PARAM ')' '{' VARS_PRIME BLOCK RETURN EXPRESSION '}'
-             | FUNC VOID add_type ID add_id save_function '(' PARAM ')' '{' VARS_PRIME BLOCK '}'
+    FUNCTION : FUNC TIPO_SIMPLE add_function_type ID add_id save_function '(' PARAM add_parameters ')' '{' VARS_PRIME BLOCK RETURN EXPRESSION ';' save_function_as_global_variable '}' empty_local_variables_table
+             | FUNC VOID add_type ID add_id save_function '(' PARAM add_parameters ')' '{' VARS_PRIME BLOCK '}' empty_local_variables_table
     '''
     pass
 
+def p_add_parameters(p):
+    '''add_parameters : '''
+    semantics.add_parameters()
+
 def p_PARAM(p):
     '''
-    PARAM : TIPO_SIMPLE add_type ID add_id PARAM_PRIME save_local_ids
+    PARAM : TIPO_SIMPLE ID add_id save_parameter PARAM_PRIME
           | empty
     '''
     pass
 
 def p_PARAM_PRIME(p):
     '''
-    PARAM_PRIME : ',' TIPO_SIMPLE add_type ID add_id PARAM_PRIME
+    PARAM_PRIME : ',' TIPO_SIMPLE ID add_id save_parameter PARAM_PRIME
                 | empty
     '''
     pass
@@ -417,6 +429,4 @@ i = 0
 for quad in semantics.quadruples:
     print(f'{i}. {quad.print_quadruple()}')
     i+=1
-print('Variables table:')
-semantics.global_variables_table.print_variables_table()
 ############################
