@@ -54,6 +54,7 @@ class Functions_Directory:
         print(self.functions_directory)
 
 class Variables_Table:
+
     def __init__(self) -> None:
         columns = ['Name', 'Type', 'Kind', 'Virtual Direction']
         self.variables_table = pd.DataFrame(columns=columns)
@@ -75,39 +76,118 @@ class Variables_Table:
     def lookup_variable(self, name: str) -> bool:
         return name in self.variables_table['Name'].values
     
-    def get_variable(self, name: str) -> pd.DataFrame:
+    def get_variable(self, name: str, is_vm:bool=False) -> pd.DataFrame:
         variable = self.variables_table[self.variables_table['Name'] == name]
         if not variable.empty:
             return variable
         else:
-            raise Exception(f'Identifier "{name}" has not been declared!')
+            if is_vm:
+                return variable
+            else:
+                raise Exception(f'Identifier "{name}" has not been declared!')
         
     def get_type(self, name: str) -> str:
         return self.get_variable(name).iloc[0]['Type']
     
     def print_variables_table(self) -> None:
         print(self.variables_table)
+    
+    def get_virtual_memory(self, name: str) -> int:
+        df = self.get_variable(name, is_vm=True)
+        if df.empty:
+            return -1
+        else:
+            return df.iloc[0]['Virtual Direction']
 
-    def get_types_counter_list(self) -> str:
+    def get_types_counter_list(self, is_local:bool=False) -> str:
         types_count_list = []
-        types_count = self.variables_table['Type'].value_counts()
-        if 'int' in types_count:
-            types_count_list.append(types_count['int'])
-        else:
-            types_count_list.append(0)
-        if 'float' in types_count:
-            types_count_list.append(types_count['float'])
-        else:
-            types_count_list.append(0)
-        if 'char' in types_count:
-            types_count_list.append(types_count['char'])
-        else:
-            types_count_list.append(0)
-        if 'bool' in types_count:
-            types_count_list.append(types_count['bool'])
-        else:
-            types_count_list.append(0)
+        # global variables
+        global_ints = 0
+        global_floats = 0
+        global_chars = 0
+        global_booleans = 0
+        # local variables
+        local_ints = 0
+        local_floats = 0
+        local_chars = 0
+        local_booleans = 0
+        # constants
+        constant_ints = 0
+        constant_floats = 0
+        constant_chars = 0
+        constant_booleans = 0
+        # temporals
+        temporal_ints = 0
+        temporal_floats = 0
+        temporal_chars = 0
+        temporal_booleans = 0
+        
+        for index, row in self.variables_table.iterrows():
+            kind = row['Kind']
+            type = row['Type']
+            if type == 'int':
+                if kind == 'var':
+                    if is_local:
+                        local_ints += 1
+                    else:
+                        global_ints += 1
+                if kind == 'const':
+                    constant_ints += 1
+                if kind == 'temp':
+                    temporal_ints += 1
+            elif type == 'float':
+                if kind == 'var':
+                    if is_local:
+                        local_floats += 1
+                    else:
+                        global_floats += 1
+                if kind == 'const':
+                    constant_floats += 1
+                if kind == 'temp':
+                    temporal_floats += 1
+            elif type == 'char':
+                if kind == 'var':
+                    if is_local:
+                        local_chars += 1
+                    else:
+                        global_chars += 1
+                if kind == 'const':
+                    constant_chars += 1
+                if kind == 'temp':
+                    temporal_chars += 1
+            elif type == 'bool':
+                if kind == 'var':
+                    if is_local:
+                        local_booleans += 1
+                    else:
+                        global_booleans += 1
+                if kind == 'const':
+                    constant_booleans += 1
+                if kind == 'temp':
+                    temporal_booleans += 1
+        # global variables
+        types_count_list.append(global_ints)
+        types_count_list.append(global_floats)
+        types_count_list.append(global_chars)
+        types_count_list.append(global_booleans)
+        # local variables
+        types_count_list.append(local_ints)
+        types_count_list.append(local_floats)
+        types_count_list.append(local_chars)
+        types_count_list.append(local_booleans)
+        # constants
+        types_count_list.append(constant_ints)
+        types_count_list.append(constant_floats)
+        types_count_list.append(constant_chars)
+        types_count_list.append(constant_booleans)
+        # temporals
+        types_count_list.append(temporal_ints)
+        types_count_list.append(temporal_floats)
+        types_count_list.append(temporal_chars)
+        types_count_list.append(temporal_booleans)
+        # int, float, char, bool
+        # [g_i, g_f, g_c, g_b, l_i, l_f, l_c, l_b, c_i, c_f, c_c, c_b, t_i, t_f, t_c, t_b]
         return str(types_count_list)
-
+    
     def empty_variables_table(self) -> None:
         self.variables_table = self.variables_table.iloc[0:0]

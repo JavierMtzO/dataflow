@@ -1,23 +1,23 @@
 from Semantics.semantic_cube import types
 
-DATATYPE_SIZE = 10000
+DATATYPE_SIZE = 5000
 
 INT_START = 0
-FLOAT_START = DATATYPE_SIZE
-CHAR_START = FLOAT_START + DATATYPE_SIZE
-BOOL_START = CHAR_START + DATATYPE_SIZE
+FLOAT_START = INT_START + DATATYPE_SIZE * 4
+CHAR_START = FLOAT_START + DATATYPE_SIZE * 4
+BOOL_START = CHAR_START + DATATYPE_SIZE * 4
 
 class VirtualMemory():
 
     # Int ranges
-    global_int_range = [INT_START, INT_START + DATATYPE_SIZE - 1]
-    global_int_counter = global_int_range[0] 
-    constant_int_range = [INT_START + DATATYPE_SIZE, INT_START + (DATATYPE_SIZE * 2) - 1]
-    constant_int_counter = constant_int_range[0] 
-    local_int_range = [INT_START + (DATATYPE_SIZE * 2), INT_START + (DATATYPE_SIZE * 3) - 1]
-    local_int_counter = local_int_range[0]
-    temp_int_range = [INT_START + (DATATYPE_SIZE * 3), INT_START + (DATATYPE_SIZE * 4) - 1]
-    temp_int_counter = temp_int_range[0]
+    global_int_range = [INT_START, INT_START + DATATYPE_SIZE - 1] # 0 4,999
+    global_int_counter = global_int_range[0] # 0
+    constant_int_range = [INT_START + DATATYPE_SIZE, INT_START + (DATATYPE_SIZE * 2) - 1] #5,000 9,999
+    constant_int_counter = constant_int_range[0] # 5,000
+    local_int_range = [INT_START + (DATATYPE_SIZE * 2), INT_START + (DATATYPE_SIZE * 3) - 1] #10,000 14,999
+    local_int_counter = local_int_range[0] # 10,000
+    temp_int_range = [INT_START + (DATATYPE_SIZE * 3), INT_START + (DATATYPE_SIZE * 4) - 1]#15,000 19,999
+    temp_int_counter = temp_int_range[0] # 15,000
 
     # Float ranges
     global_float_range = [FLOAT_START, FLOAT_START + DATATYPE_SIZE - 1]
