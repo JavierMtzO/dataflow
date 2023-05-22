@@ -28,6 +28,9 @@ class Semantics:
     global_variables_table = Variables_Table()
     local_variables_table = Variables_Table()
 
+    final_global_mem = ""
+    final_global_constant_dict = {}
+
     virtual_memory = VirtualMemory()
 
 
@@ -304,17 +307,20 @@ class Semantics:
     
     def empty_variables_table(self, is_local: bool = False) -> None:
         if is_local:
-            print(f"Local Variables Table for function {self.functions_directory.get_current_function()}: ")
+            # print(f"Local Variables Table for function {self.functions_directory.get_current_function()}: ")
             self.end_function()
-            self.local_variables_table.print_variables_table()
+            # self.local_variables_table.print_variables_table()
             self.local_variables_table.empty_variables_table()
             self.current_scope = "global"
         else:
-            print("Functions Directory: ")
-            self.functions_directory.print_functions_directory()
-            print("Global Variables Table: ")
-            self.global_variables_table.print_variables_table()
+            self.final_global_mem = self.global_variables_table.get_types_counter_list()
+            self.final_global_constant_dict = self.global_variables_table.get_constant_dict()
+            # print("Functions Directory: ")
+            # self.functions_directory.print_functions_directory()
+            # print("Global Variables Table: ")
+            # self.global_variables_table.print_variables_table()
             self.global_variables_table.empty_variables_table()
+            self.end_program()
     
     def era_quad(self, current_function:str) -> None:
         self.current_function = current_function
@@ -358,6 +364,10 @@ class Semantics:
         self.operands_stack.append(function_name)
         self.types_stack.append(variable_type)
         self.types_stack.append(function_type)
+    
+    def end_program(self) -> None:
+        quadruple = Quadruple(operation='endprogram')
+        self.append_quad(quadruple)
 
 
 

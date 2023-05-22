@@ -9,6 +9,7 @@ quadruple_operations = operations | {
     'era': 'era',
     'gosub': 'gosub',
     'param': 'param',
+    'endprogram':'endprogram',
 
 }
 

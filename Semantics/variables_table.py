@@ -98,6 +98,10 @@ class Variables_Table:
             return -1
         else:
             return df.iloc[0]['Virtual Direction']
+    
+    def get_constant_dict(self) -> dict:
+        filtered_df = self.variables_table[self.variables_table['Kind'] == 'const']
+        return filtered_df.set_index('Virtual Direction')['Name'].to_dict()
 
     def get_types_counter_list(self, is_local:bool=False) -> str:
         types_count_list = []

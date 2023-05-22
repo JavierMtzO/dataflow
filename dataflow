@@ -1,6 +1,35 @@
 #!/usr/bin/env python
 from sys import argv
 from parser import dataflow_parser, semantics
+from Memories.runtime_memory import Runtime_Memory
+
+def virtual_machine(resources:str, constant_dict:str):
+    global_memory = Runtime_Memory(resources, constant_dict)
+    quadruples = semantics.quadruples
+    ip = 0
+    print('\nSTART OF DATAFLOW PROGRAM')
+
+    while (True):
+        current_quad = quadruples[ip]
+        if current_quad.op_code == 'endprogram':
+            break
+        elif current_quad.op_code == '+':
+            left_operand = global_memory.get_content(current_quad.left_operand)
+            right_operand = global_memory.get_content(current_quad.right_operand)
+            result = left_operand + right_operand
+            global_memory.assign_content_value(current_quad.result, result)
+            ip += 1
+        elif current_quad.op_code == '=':
+            global_memory.assign_content(current_quad.result, current_quad.left_operand)
+            ip += 1
+        elif current_quad.op_code == 'print':
+            print_content = global_memory.get_content(current_quad.result)
+            print(print_content, end='')
+            ip += 1
+        elif current_quad.op_code == 'goto':
+            ip = current_quad.result
+    
+    print('\nEND OF DATAFLOW PROGRAM')
 
 
 if __name__ == '__main__':
@@ -12,15 +41,16 @@ if __name__ == '__main__':
         input_str = file.read()
         file.close()
         dataflow_parser.parse(input_str)
-        print(f'id_queue: {semantics.id_queue}')
-        print(f'types_stack: {semantics.types_stack}')
-        print(f'operands_stack: {semantics.operands_stack}')
-        print(f'operators_stack: {semantics.operators_stack}')
-        print(f'for_vc_stack: {semantics.for_vc_stack}')
-        print(f'for_vf_stack: {semantics.for_vf_stack}')
-        print(f'jumps_stack: {semantics.jumps_stack}')
-        print('Quadruples:')
-        i = 0
-        for quad in semantics.quadruples:
-            print(f'{i}. {quad.print_quadruple()}')
-            i+=1
+        # print('Quadruples:')
+        # i = 0
+        # for quad in semantics.quadruples:
+        #     print(f'{i}. {quad.print_quadruple()}')
+        #     i+=1
+        virtual_machine(semantics.final_global_mem, semantics.final_global_constant_dict)
+        # print(f'id_queue: {semantics.id_queue}')
+        # print(f'types_stack: {semantics.types_stack}')
+        # print(f'operands_stack: {semantics.operands_stack}')
+        # print(f'operators_stack: {semantics.operators_stack}')
+        # print(f'for_vc_stack: {semantics.for_vc_stack}')
+        # print(f'for_vf_stack: {semantics.for_vf_stack}')
+        # print(f'jumps_stack: {semantics.jumps_stack}')
