@@ -77,5 +77,17 @@
     Funciones - Cuádruplos generados
 
     Llamadas de funciones - Cuádruplos generados.
+
+- **Fecha:** 21/Mayo/2023
+
+- **Descripción:** Memoria Virtual, Memoria RunTime y Máquina virtual
+
+- **Estado:**
+
+    Memoria Virtual - Se generó la máquina virtual la cual asigna las direcciones.
+
+    Memoria RunTime - Se inicializó la memoria RunTime para uso sencillo.
+
+    Máquina Virtual - Se inicializó la máquina virtual para uso sencillo.
     
 <br>
