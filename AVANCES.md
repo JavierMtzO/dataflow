@@ -89,5 +89,23 @@
     Memoria RunTime - Se inicializó la memoria RunTime para uso sencillo.
 
     Máquina Virtual - Se inicializó la máquina virtual para uso sencillo.
+
+- **Fecha:** 26/Mayo/2023
+
+- **Descripción:** Generar asignaciones y procedimientos aritméticos con máquina virtual
+
+- **Estado:**
+
+    Máquina Virtual - Ya procesa procedimientos aritméticos.
+
+- **Fecha:** 27/Mayo/2023
+
+- **Descripción:** Generar if, while y for con máquina virtual. Incializar para funciones.
+
+- **Estado:**
+
+    Máquina Virtual - Ya procesa if, while y for.
+
+    Máquina Virtual - Se ha empezado la generación de funciones, aún no está lista.
     
 <br>

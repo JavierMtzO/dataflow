@@ -52,6 +52,7 @@ class Functions_Directory:
     
     def print_functions_directory(self) -> None:
         print(self.functions_directory)
+        print('')
 
 class Variables_Table:
 
@@ -91,6 +92,7 @@ class Variables_Table:
     
     def print_variables_table(self) -> None:
         print(self.variables_table)
+        print('')
     
     def get_virtual_memory(self, name: str) -> int:
         df = self.get_variable(name, is_vm=True)
@@ -101,7 +103,8 @@ class Variables_Table:
     
     def get_constant_dict(self) -> dict:
         filtered_df = self.variables_table[self.variables_table['Kind'] == 'const']
-        return filtered_df.set_index('Virtual Direction')['Name'].to_dict()
+        constant_dict = filtered_df.set_index('Virtual Direction')['Name'].to_dict()
+        return constant_dict
 
     def get_types_counter_list(self, is_local:bool=False) -> str:
         types_count_list = []

@@ -6,20 +6,23 @@ void main {
     i = 1;
     o = i + 4 + x;
     k = 3 + 6 / 2 * (4 + 1) / o;
-    print(k) ;
-    print(x, o) ;
     if(x + 3 - 5 > o + 60 - 5){
         o = 5 + 8 ;
+        print(o);
     } else {
         o = 3 + 6 ;
+        print(o);
     }
     while( x > i){
         i = i + 1;
+        print(i);
     }
-    for j = 1 to (4+2) do {
+    for j = 1 to (4) do {
         for j = 1 to (6) do {
             j = o + 1;
+            print(j);
         }
     }
     y = 3 + 9 ;
+    print(y);
 }

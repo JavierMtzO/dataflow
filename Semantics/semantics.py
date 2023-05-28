@@ -100,21 +100,17 @@ class Semantics:
     def save_function_as_global_variable(self) -> None:
         expressions_type = self.types_stack.pop()
         function_type = self.types_stack.pop()
-        operator = '='
+        operator = 'return'
         operand = self.operands_stack.pop()
         name = self.functions_directory.get_current_function()
         if expressions_type != function_type:
             raise Exception(f'Function "{name}" is declared as a {function_type} and it is returning {expressions_type}')
         virtual_direction = self.virtual_memory.assign_virtual_address(type=function_type, is_global=True)
         self.global_variables_table.push_variable(name=name, type=expressions_type, kind='var', virtual_direction=virtual_direction)
-
-        if self.current_scope == "global":
+        operand_virtual_direction = self.local_variables_table.get_virtual_memory(name=operand)
+        if operand_virtual_direction == -1:   
             operand_virtual_direction = self.global_variables_table.get_virtual_memory(name=operand)
-        elif self.current_scope == "local":
-            operand_virtual_direction = self.local_variables_table.get_virtual_memory(name=operand)
-            if operand_virtual_direction == -1:   
-                operand_virtual_direction = self.global_variables_table.get_virtual_memory(name=operand)
-        quadruple = Quadruple(operation=operator, left_operand=operand_virtual_direction, result=virtual_direction)
+        quadruple = Quadruple(operation=operator, result=operand_virtual_direction)
         self.append_quad(quadruple)
 
     
@@ -205,8 +201,33 @@ class Semantics:
         self.append_quad(quadruple)
 
     def go_to_false_quad(self) -> None:
+        operand = self.operands_stack.pop()
+        if self.current_scope == "global":
+            operand_virtual_direction = self.global_variables_table.get_virtual_memory(name=operand)
+        elif self.current_scope == "local":
+            operand_virtual_direction = self.local_variables_table.get_virtual_memory(name=operand)
+            if operand_virtual_direction == -1:
+                operand_virtual_direction = self.global_variables_table.get_virtual_memory(name=operand)
         self.jumps_stack.append(self.quadruple_counter)
-        quadruple = Quadruple(operation="gotof")
+        quadruple = Quadruple(operation="gotof", left_operand=operand_virtual_direction)
+        self.append_quad(quadruple)
+        self.operands_stack.append(operand)
+    
+    def go_to_true_quad(self) -> None:
+        operand = self.operands_stack.pop()
+        if self.current_scope == "global":
+            operand_virtual_direction = self.global_variables_table.get_virtual_memory(name=operand)
+        elif self.current_scope == "local":
+            operand_virtual_direction = self.local_variables_table.get_virtual_memory(name=operand)
+            if operand_virtual_direction == -1:
+                operand_virtual_direction = self.global_variables_table.get_virtual_memory(name=operand)
+        self.jumps_stack.append(self.quadruple_counter)
+        quadruple = Quadruple(operation="gotot", left_operand=operand_virtual_direction)
+        self.append_quad(quadruple)
+    
+    def go_to_quad(self) -> None:
+        result = self.jumps_stack.pop()
+        quadruple = Quadruple(operation="goto", result=result)
         self.append_quad(quadruple)
     
     def fill_go_to_false_quad(self,  jumps:int=1) -> None:
@@ -226,16 +247,6 @@ class Semantics:
         index = self.jumps_stack.pop()
         self.quadruples[index].result = self.quadruple_counter + jumps
     
-    def go_to_true_quad(self) -> None:
-        self.jumps_stack.append(self.quadruple_counter)
-        quadruple = Quadruple(operation="gotot")
-        self.append_quad(quadruple)
-    
-    def go_to_quad(self) -> None:
-        result = self.jumps_stack.pop()
-        quadruple = Quadruple(operation="goto", result=result)
-        self.append_quad(quadruple)
-    
     def fill_go_to_true_quad(self, jumps:int=0) -> None:
         index = self.jumps_stack.pop()
         self.quadruples[index].result = self.quadruple_counter + jumps
@@ -253,32 +264,33 @@ class Semantics:
     def check_boolean_expression_for(self) -> tuple[str,str,str]:
         vf = self.for_vf_stack.pop()
         vc = self.for_vc_stack.pop()
-        operator = '<'
+        operator = '<='
         self.for_vf_stack.append(vf)
         self.for_vc_stack.append(vc)
         return vc,vf,operator
     
     def generate_for_quad(self) -> None:
         vc,vf,operator = self.check_boolean_expression_for()
-        temp_var_type = self.types_stack.pop()
-        self.types_stack.pop()
+        right_type = self.types_stack.pop()
+        left_type = self.types_stack.pop()
+        
         # Generate new temporal variable
+        temp_var_type = self.semantic_cube.match_types(left_type, right_type, operator)
         temporal_variable = f"vf{self.temp_for_counter}"
         self.temp_for_counter += 1
-        virtual_direction = self.virtual_memory.assign_virtual_address(type=temp_var_type, is_temp=True)
+        temp_virtual_direction = self.virtual_memory.assign_virtual_address(type=temp_var_type, is_temp=True)
         if self.current_scope == "local":
-            self.local_variables_table.push_variable(name=temporal_variable, type=temp_var_type, kind='temp', virtual_direction=virtual_direction)
+            self.local_variables_table.push_variable(name=temporal_variable, type=temp_var_type, kind='temp', virtual_direction=temp_virtual_direction)
             vc_virtual_direction = self.local_variables_table.get_virtual_memory(name=vc)
             vf_virtual_direction = self.local_variables_table.get_virtual_memory(name=vf)
         if self.current_scope == "global":
-            self.global_variables_table.push_variable(name=temporal_variable, type=temp_var_type, kind='temp', virtual_direction=virtual_direction)
+            self.global_variables_table.push_variable(name=temporal_variable, type=temp_var_type, kind='temp', virtual_direction=temp_virtual_direction)
             vc_virtual_direction = self.global_variables_table.get_virtual_memory(name=vc)
             vf_virtual_direction = self.global_variables_table.get_virtual_memory(name=vf)
-        
-        
-        quadruple = Quadruple(operation=operator, left_operand=vc_virtual_direction, right_operand = vf_virtual_direction ,result=virtual_direction)
+        quadruple = Quadruple(operation=operator, left_operand=vc_virtual_direction, right_operand = vf_virtual_direction ,result=temp_virtual_direction)
         self.append_quad(quadruple)
         self.jumps_stack.append(self.quadruple_counter - 1)
+        self.operands_stack.append(temporal_variable)
         self.go_to_false_quad()
     
     def end_for(self) -> None:
@@ -304,21 +316,23 @@ class Semantics:
         self.functions_directory.push_variables_types_used(name=current_function, types_array=types_array)
         quadruple = Quadruple(operation='endfunc')
         self.append_quad(quadruple)
+        self.virtual_memory.restart_local_memory()
     
     def empty_variables_table(self, is_local: bool = False) -> None:
         if is_local:
-            # print(f"Local Variables Table for function {self.functions_directory.get_current_function()}: ")
+            print(f"Local Variables Table for function {self.functions_directory.get_current_function()}: ")
             self.end_function()
-            # self.local_variables_table.print_variables_table()
+            self.local_variables_table.print_variables_table()
+            self.final_global_constant_dict.update(self.local_variables_table.get_constant_dict())
             self.local_variables_table.empty_variables_table()
             self.current_scope = "global"
         else:
             self.final_global_mem = self.global_variables_table.get_types_counter_list()
-            self.final_global_constant_dict = self.global_variables_table.get_constant_dict()
-            # print("Functions Directory: ")
-            # self.functions_directory.print_functions_directory()
-            # print("Global Variables Table: ")
-            # self.global_variables_table.print_variables_table()
+            self.final_global_constant_dict.update(self.global_variables_table.get_constant_dict())
+            print("Functions Directory: ")
+            self.functions_directory.print_functions_directory()
+            print("Global Variables Table: ")
+            self.global_variables_table.print_variables_table()
             self.global_variables_table.empty_variables_table()
             self.end_program()
     
@@ -339,17 +353,19 @@ class Semantics:
         current_parameter_type = self.types_stack.pop()
         operand = self.operands_stack.pop()
         if original_parameter_type != current_parameter_type:
-            raise Exception(f'Try to call a parameter of type "{current_parameter_type}" when a parameter of {original_parameter_type} is required')
+            raise Exception(f'Tried to call a parameter of type "{current_parameter_type}" when a parameter of {original_parameter_type} is required')
         if self.current_scope == "global":
             operand_virtual_direction = self.global_variables_table.get_virtual_memory(name=operand)
         elif self.current_scope == "local":
             operand_virtual_direction = self.local_variables_table.get_virtual_memory(name=operand)
             if operand_virtual_direction == -1:
                 operand_virtual_direction = self.global_variables_table.get_virtual_memory(name=operand)
-        quadruple = Quadruple(operation='param', left_operand=operand_virtual_direction)
+        parameter_virtual_direction = self.virtual_memory.assign_virtual_address_parameter(type=current_parameter_type)
+        quadruple = Quadruple(operation='param', left_operand=operand_virtual_direction, result=parameter_virtual_direction)
         self.append_quad(quadruple)
     
     def go_sub_quad(self) -> None:
+        self.virtual_memory.restart_parameters()
         quadruple = Quadruple(operation='gosub', result=self.function_dir)
         self.append_quad(quadruple)
     

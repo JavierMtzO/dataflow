@@ -1,9 +1,16 @@
-program easy_program; 
+program patito; 
 
-var int i; 
-
+var int x, i, j;
 void main {
-    i = 2;
-    print(i + 2);
+    x = 5;
+    i = 0;
+    for j = 1 to (15) do {
+        print(j);
+        for i = 1 to (15) do {
+            j = j + 1;
+            i = i + 3;
+            print(i);
+        }
+    }
 }
 

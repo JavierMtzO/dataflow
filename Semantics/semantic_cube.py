@@ -22,6 +22,7 @@ operations = {
         '!=': '!=',
         '>': '>',
         '<': '<',
+        '<=':'<='
     }
 
 class Semantic_Cube():
@@ -40,6 +41,7 @@ class Semantic_Cube():
                 '!=': types['bool'],
                 '>': types['bool'],
                 '<': types['bool'],
+                '<=': types['bool'],
             },
             'float': {
                 '=': 'ERROR',

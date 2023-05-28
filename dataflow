@@ -1,33 +1,326 @@
 #!/usr/bin/env python
 from sys import argv
 from parser import dataflow_parser, semantics
+from collections import deque
 from Memories.runtime_memory import Runtime_Memory
+from Memories.virtual_memory import DATATYPE_SIZE
+
+def check_if_global_variable(virtual_address: int):
+    memory_categorizer = int(virtual_address / DATATYPE_SIZE)
+    # INT
+    if memory_categorizer == 0:
+        return True
+    if memory_categorizer == 1:
+        return True
+    # FLOAT
+    if memory_categorizer == 4:
+        return True
+    if memory_categorizer == 5:
+        return True
+    # CHAR
+    if memory_categorizer == 8:
+        return True
+    if memory_categorizer == 9:
+        return True
+    # BOOL
+    if memory_categorizer == 12:
+        return True
+    if memory_categorizer == 13:
+        return True
+    
+    return False
 
 def virtual_machine(resources:str, constant_dict:str):
     global_memory = Runtime_Memory(resources, constant_dict)
+    memories = deque()
+    memories.append(global_memory)
     quadruples = semantics.quadruples
     ip = 0
-    print('\nSTART OF DATAFLOW PROGRAM')
+    print('\nSTART OF DATAFLOW PROGRAM \n')
 
     while (True):
         current_quad = quadruples[ip]
         if current_quad.op_code == 'endprogram':
             break
+
         elif current_quad.op_code == '+':
-            left_operand = global_memory.get_content(current_quad.left_operand)
-            right_operand = global_memory.get_content(current_quad.right_operand)
+            if check_if_global_variable(current_quad.left_operand):
+                current_memory = memories.popleft()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.append(current_memory)
+            if check_if_global_variable(current_quad.right_operand):
+                current_memory = memories.popleft()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.append(current_memory)
             result = left_operand + right_operand
-            global_memory.assign_content_value(current_quad.result, result)
+            current_memory.assign_content_value(current_quad.result, result)
             ip += 1
+            memories.append(current_memory)
+
+        elif current_quad.op_code == '-':
+            if check_if_global_variable(current_quad.left_operand):
+                current_memory = memories.popleft()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.append(current_memory)
+            if check_if_global_variable(current_quad.right_operand):
+                current_memory = memories.popleft()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.append(current_memory)
+            result = left_operand - right_operand
+            current_memory.assign_content_value(current_quad.result, result)
+            ip += 1
+            memories.append(current_memory)
+
+        elif current_quad.op_code == '*':
+            if check_if_global_variable(current_quad.left_operand):
+                current_memory = memories.popleft()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.append(current_memory)
+            if check_if_global_variable(current_quad.right_operand):
+                current_memory = memories.popleft()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.append(current_memory)
+            result = left_operand * right_operand
+            current_memory.assign_content_value(current_quad.result, result)
+            ip += 1
+            memories.append(current_memory)
+
+        elif current_quad.op_code == '/':
+            if check_if_global_variable(current_quad.left_operand):
+                current_memory = memories.popleft()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.append(current_memory)
+            if check_if_global_variable(current_quad.right_operand):
+                current_memory = memories.popleft()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.append(current_memory)
+            result = left_operand / right_operand
+            current_memory.assign_content_value(current_quad.result, result)
+            ip += 1
+            memories.append(current_memory)
+
+        elif current_quad.op_code == '>':
+            if check_if_global_variable(current_quad.left_operand):
+                current_memory = memories.popleft()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.append(current_memory)
+            if check_if_global_variable(current_quad.right_operand):
+                current_memory = memories.popleft()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.append(current_memory)
+            result = left_operand > right_operand
+            current_memory.assign_content_value(current_quad.result, result)
+            ip += 1
+            memories.append(current_memory)
+
+        elif current_quad.op_code == '<=':
+            if check_if_global_variable(current_quad.left_operand):
+                current_memory = memories.popleft()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.append(current_memory)
+            if check_if_global_variable(current_quad.right_operand):
+                current_memory = memories.popleft()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.append(current_memory)
+            result = left_operand <= right_operand
+            current_memory.assign_content_value(current_quad.result, result)
+            ip += 1
+            memories.append(current_memory)
+
+        elif current_quad.op_code == '<':
+            if check_if_global_variable(current_quad.left_operand):
+                current_memory = memories.popleft()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.append(current_memory)
+            if check_if_global_variable(current_quad.right_operand):
+                current_memory = memories.popleft()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.append(current_memory)
+            result = left_operand < right_operand
+            current_memory.assign_content_value(current_quad.result, result)
+            ip += 1
+            memories.append(current_memory)
+
+        elif current_quad.op_code == '==':
+            if check_if_global_variable(current_quad.left_operand):
+                current_memory = memories.popleft()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.append(current_memory)
+            if check_if_global_variable(current_quad.right_operand):
+                current_memory = memories.popleft()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.append(current_memory)
+            result = left_operand > right_operand
+            current_memory.assign_content_value(current_quad.result, result)
+            ip += 1
+            memories.append(current_memory)
+
+        elif current_quad.op_code == '&&':
+            if check_if_global_variable(current_quad.left_operand):
+                current_memory = memories.popleft()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.append(current_memory)
+            if check_if_global_variable(current_quad.right_operand):
+                current_memory = memories.popleft()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.append(current_memory)
+            result = left_operand and right_operand
+            current_memory.assign_content_value(current_quad.result, result)
+            ip += 1
+            memories.append(current_memory)
+
+        elif current_quad.op_code == '||':
+            if check_if_global_variable(current_quad.left_operand):
+                current_memory = memories.popleft()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.append(current_memory)
+            if check_if_global_variable(current_quad.right_operand):
+                current_memory = memories.popleft()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.append(current_memory)
+            result = left_operand or right_operand
+            current_memory.assign_content_value(current_quad.result, result)
+            ip += 1
+            memories.append(current_memory)
+
         elif current_quad.op_code == '=':
-            global_memory.assign_content(current_quad.result, current_quad.left_operand)
+            if check_if_global_variable(current_quad.result) and check_if_global_variable(current_quad.left_operand):
+                current_memory = memories.popleft()
+                current_memory.assign_content(current_quad.result, current_memory.return_content(current_quad.left_operand))
+                memories.appendleft(current_memory)
+            elif check_if_global_variable(current_quad.result) and not check_if_global_variable(current_quad.left_operand):
+                local_memory = memories.pop()
+                global_memory = memories.popleft()
+                global_memory.assign_content(current_quad.result, local_memory.return_content(current_quad.left_operand))
+                memories.append(local_memory)
+                memories.appendleft(global_memory)
+            if check_if_global_variable(current_quad.left_operand) and not check_if_global_variable(current_quad.result):
+                local_memory = memories.pop()
+                global_memory = memories.popleft()
+                local_memory.assign_content(current_quad.result, global_memory.return_content(current_quad.left_operand))
+                memories.append(local_memory)
+                memories.appendleft(global_memory)
+            else:
+                current_memory = memories.pop()
+                current_memory.assign_content(current_quad.result, current_memory.return_content(current_quad.left_operand))
+                memories.append(current_memory)
             ip += 1
+            memories.append(current_memory)
+
         elif current_quad.op_code == 'print':
-            print_content = global_memory.get_content(current_quad.result)
-            print(print_content, end='')
+            if check_if_global_variable(current_quad.result):
+                current_memory = memories.popleft()
+                result = current_memory.return_content(current_quad.result)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                result = current_memory.return_content(current_quad.result)
+                memories.append(current_memory)
+            print_content = result
+            print(print_content)
             ip += 1
+            memories.append(current_memory)
+
         elif current_quad.op_code == 'goto':
             ip = current_quad.result
+
+        elif current_quad.op_code == 'gotof':
+            current_memory = memories.pop()
+            false_var = current_memory.return_content(current_quad.left_operand)
+            memories.append(current_memory)
+            if false_var == False:
+                ip = current_quad.result
+            else:
+                ip += 1
+
+        elif current_quad.op_code == 'gotot':
+            current_memory = memories.pop()
+            true_var = current_memory.return_content(current_quad.left_operand)
+            memories.append(current_memory)
+            if true_var:
+                ip = current_quad.result
+            else:
+                ip += 1
     
     print('\nEND OF DATAFLOW PROGRAM')
 
@@ -41,16 +334,17 @@ if __name__ == '__main__':
         input_str = file.read()
         file.close()
         dataflow_parser.parse(input_str)
-        # print('Quadruples:')
-        # i = 0
-        # for quad in semantics.quadruples:
-        #     print(f'{i}. {quad.print_quadruple()}')
-        #     i+=1
-        virtual_machine(semantics.final_global_mem, semantics.final_global_constant_dict)
-        # print(f'id_queue: {semantics.id_queue}')
-        # print(f'types_stack: {semantics.types_stack}')
-        # print(f'operands_stack: {semantics.operands_stack}')
-        # print(f'operators_stack: {semantics.operators_stack}')
-        # print(f'for_vc_stack: {semantics.for_vc_stack}')
-        # print(f'for_vf_stack: {semantics.for_vf_stack}')
-        # print(f'jumps_stack: {semantics.jumps_stack}')
+        print(f'id_queue: {semantics.id_queue}')
+        print(f'types_stack: {semantics.types_stack}')
+        print(f'operands_stack: {semantics.operands_stack}')
+        print(f'operators_stack: {semantics.operators_stack}')
+        print(f'for_vc_stack: {semantics.for_vc_stack}')
+        print(f'for_vf_stack: {semantics.for_vf_stack}')
+        print(f'jumps_stack: {semantics.jumps_stack}')
+        print(semantics.final_global_constant_dict)
+        print('Quadruples:')
+        i = 0
+        for quad in semantics.quadruples:
+            print(f'{i}. {quad.print_quadruple()}')
+            i+=1
+        # virtual_machine(semantics.final_global_mem, semantics.final_global_constant_dict)

@@ -275,20 +275,20 @@ def p_append_jump(p):
 
 def p_CONDITION(p):
     '''
-    CONDITION : IF '(' EXPRESSION pop_operand pop_type ')' '{' go_to_false_quad BLOCK '}' fill_go_to_false_quad ELSE_STMT
+    CONDITION : IF '(' EXPRESSION pop_type ')' '{' go_to_false_quad BLOCK '}' fill_go_to_false_quad ELSE_STMT
     '''
     pass
 
 def p_ELSE_STMT(p):
     '''
     ELSE_STMT : ELSE '{' go_to_true_quad BLOCK '}' fill_go_to_true_quad
-              | empty
+              | empty pop_operand
     '''
     pass
 
 def p_WHILE_STMT(p):
     '''
-    WHILE_STMT : WHILE '(' append_jump EXPRESSION pop_operand pop_type ')' '{' go_to_false_quad  BLOCK '}' fill_go_to_false_quad go_to_quad
+    WHILE_STMT : WHILE '(' append_jump EXPRESSION pop_type ')' '{' go_to_false_quad  BLOCK '}' fill_go_to_false_quad go_to_quad pop_operand
     '''
     pass
 

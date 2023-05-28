@@ -81,10 +81,10 @@ Rule 75    go_to_quad -> <empty>
 Rule 76    pop_operand -> <empty>
 Rule 77    pop_type -> <empty>
 Rule 78    append_jump -> <empty>
-Rule 79    CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
+Rule 79    CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
 Rule 80    ELSE_STMT -> ELSE { go_to_true_quad BLOCK } fill_go_to_true_quad
-Rule 81    ELSE_STMT -> empty
-Rule 82    WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad
+Rule 81    ELSE_STMT -> empty pop_operand
+Rule 82    WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand
 Rule 83    check_exact_type_for -> <empty>
 Rule 84    add_final_counter_for -> <empty>
 Rule 85    generate_for_quad -> <empty>
@@ -244,7 +244,7 @@ go_to_main           : 1
 go_to_quad           : 82
 go_to_true_quad      : 80
 param_quad           : 61 62
-pop_operand          : 79 82
+pop_operand          : 81 82
 pop_type             : 79 82
 print_quad           : 66 68 69
 save_function        : 1 33 34
@@ -2183,8 +2183,8 @@ state 99
     (91) EXPRESSION -> . AND_EXP EXPRESSION_PRIME
     (66) WRITE -> . PRINT add_operator ( EXPRESSION print_quad WRITE_PRIME )
     (67) WRITE -> . PRINT add_operator ( TITLE WRITE_PRIME )
-    (79) CONDITION -> . IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
-    (82) WHILE_STMT -> . WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad
+    (79) CONDITION -> . IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
+    (82) WHILE_STMT -> . WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand
     (88) FOR_STMT -> . ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO { BLOCK } end_for
     (89) DESCRIBE_STMT -> . ID . DESCRIBE ( )
     (25) VARIABLE -> . ID get_variable
@@ -2757,8 +2757,8 @@ state 120
     (91) EXPRESSION -> . AND_EXP EXPRESSION_PRIME
     (66) WRITE -> . PRINT add_operator ( EXPRESSION print_quad WRITE_PRIME )
     (67) WRITE -> . PRINT add_operator ( TITLE WRITE_PRIME )
-    (79) CONDITION -> . IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
-    (82) WHILE_STMT -> . WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad
+    (79) CONDITION -> . IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
+    (82) WHILE_STMT -> . WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand
     (88) FOR_STMT -> . ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO { BLOCK } end_for
     (89) DESCRIBE_STMT -> . ID . DESCRIBE ( )
     (25) VARIABLE -> . ID get_variable
@@ -3009,14 +3009,14 @@ state 133
 
 state 134
 
-    (79) CONDITION -> IF . ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
+    (79) CONDITION -> IF . ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
 
     (               shift and go to state 163
 
 
 state 135
 
-    (82) WHILE_STMT -> WHILE . ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad
+    (82) WHILE_STMT -> WHILE . ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand
 
     (               shift and go to state 164
 
@@ -3589,7 +3589,7 @@ state 162
 
 state 163
 
-    (79) CONDITION -> IF ( . EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
+    (79) CONDITION -> IF ( . EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
     (91) EXPRESSION -> . AND_EXP EXPRESSION_PRIME
     (94) AND_EXP -> . B_EXP AND_EXP_PRIME
     (97) B_EXP -> . TRUE
@@ -3626,7 +3626,7 @@ state 163
 
 state 164
 
-    (82) WHILE_STMT -> WHILE ( . append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad
+    (82) WHILE_STMT -> WHILE ( . append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand
     (78) append_jump -> .
 
     TRUE            reduce using rule 78 (append_jump -> .)
@@ -4099,16 +4099,16 @@ state 186
 
 state 187
 
-    (79) CONDITION -> IF ( EXPRESSION . pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
-    (76) pop_operand -> .
+    (79) CONDITION -> IF ( EXPRESSION . pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
+    (77) pop_type -> .
 
-    )               reduce using rule 76 (pop_operand -> .)
+    )               reduce using rule 77 (pop_type -> .)
 
-    pop_operand                    shift and go to state 206
+    pop_type                       shift and go to state 206
 
 state 188
 
-    (82) WHILE_STMT -> WHILE ( append_jump . EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad
+    (82) WHILE_STMT -> WHILE ( append_jump . EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand
     (91) EXPRESSION -> . AND_EXP EXPRESSION_PRIME
     (94) AND_EXP -> . B_EXP AND_EXP_PRIME
     (97) B_EXP -> . TRUE
@@ -4510,21 +4510,19 @@ state 205
 
 state 206
 
-    (79) CONDITION -> IF ( EXPRESSION pop_operand . pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
+    (79) CONDITION -> IF ( EXPRESSION pop_type . ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
+
+    )               shift and go to state 221
+
+
+state 207
+
+    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION . pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand
     (77) pop_type -> .
 
     )               reduce using rule 77 (pop_type -> .)
 
-    pop_type                       shift and go to state 221
-
-state 207
-
-    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION . pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad
-    (76) pop_operand -> .
-
-    )               reduce using rule 76 (pop_operand -> .)
-
-    pop_operand                    shift and go to state 222
+    pop_type                       shift and go to state 222
 
 state 208
 
@@ -4715,19 +4713,17 @@ state 220
 
 state 221
 
-    (79) CONDITION -> IF ( EXPRESSION pop_operand pop_type . ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
+    (79) CONDITION -> IF ( EXPRESSION pop_type ) . { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
 
-    )               shift and go to state 234
+    {               shift and go to state 234
 
 
 state 222
 
-    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand . pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad
-    (77) pop_type -> .
+    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type . ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand
 
-    )               reduce using rule 77 (pop_type -> .)
+    )               shift and go to state 235
 
-    pop_type                       shift and go to state 235
 
 state 223
 
@@ -4952,16 +4948,32 @@ state 233
 
 state 234
 
-    (79) CONDITION -> IF ( EXPRESSION pop_operand pop_type ) . { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
+    (79) CONDITION -> IF ( EXPRESSION pop_type ) { . go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
+    (71) go_to_false_quad -> .
 
-    {               shift and go to state 248
+    FOR             reduce using rule 71 (go_to_false_quad -> .)
+    FUNC            reduce using rule 71 (go_to_false_quad -> .)
+    PRINT           reduce using rule 71 (go_to_false_quad -> .)
+    IF              reduce using rule 71 (go_to_false_quad -> .)
+    WHILE           reduce using rule 71 (go_to_false_quad -> .)
+    ID              reduce using rule 71 (go_to_false_quad -> .)
+    TRUE            reduce using rule 71 (go_to_false_quad -> .)
+    FALSE           reduce using rule 71 (go_to_false_quad -> .)
+    (               reduce using rule 71 (go_to_false_quad -> .)
+    *               reduce using rule 71 (go_to_false_quad -> .)
+    /               reduce using rule 71 (go_to_false_quad -> .)
+    I_CONST         reduce using rule 71 (go_to_false_quad -> .)
+    F_CONST         reduce using rule 71 (go_to_false_quad -> .)
+    C_CONST         reduce using rule 71 (go_to_false_quad -> .)
+    }               reduce using rule 71 (go_to_false_quad -> .)
 
+    go_to_false_quad               shift and go to state 248
 
 state 235
 
-    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type . ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad
+    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) . { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand
 
-    )               shift and go to state 249
+    {               shift and go to state 249
 
 
 state 236
@@ -5012,8 +5024,8 @@ state 239
     (91) EXPRESSION -> . AND_EXP EXPRESSION_PRIME
     (66) WRITE -> . PRINT add_operator ( EXPRESSION print_quad WRITE_PRIME )
     (67) WRITE -> . PRINT add_operator ( TITLE WRITE_PRIME )
-    (79) CONDITION -> . IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
-    (82) WHILE_STMT -> . WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad
+    (79) CONDITION -> . IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
+    (82) WHILE_STMT -> . WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand
     (88) FOR_STMT -> . ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO { BLOCK } end_for
     (89) DESCRIBE_STMT -> . ID . DESCRIBE ( )
     (25) VARIABLE -> . ID get_variable
@@ -5089,8 +5101,8 @@ state 240
     (91) EXPRESSION -> . AND_EXP EXPRESSION_PRIME
     (66) WRITE -> . PRINT add_operator ( EXPRESSION print_quad WRITE_PRIME )
     (67) WRITE -> . PRINT add_operator ( TITLE WRITE_PRIME )
-    (79) CONDITION -> . IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
-    (82) WHILE_STMT -> . WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad
+    (79) CONDITION -> . IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
+    (82) WHILE_STMT -> . WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand
     (88) FOR_STMT -> . ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO { BLOCK } end_for
     (89) DESCRIBE_STMT -> . ID . DESCRIBE ( )
     (25) VARIABLE -> . ID get_variable
@@ -5234,7 +5246,84 @@ state 247
 
 state 248
 
-    (79) CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { . go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
+    (79) CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad . BLOCK } fill_go_to_false_quad ELSE_STMT
+    (40) BLOCK -> . STATEMENT BLOCK
+    (41) BLOCK -> . empty
+    (42) STATEMENT -> . ASSIGNATION
+    (43) STATEMENT -> . FUNC_CALL
+    (44) STATEMENT -> . EXPRESSION ;
+    (45) STATEMENT -> . WRITE ;
+    (46) STATEMENT -> . CONDITION
+    (47) STATEMENT -> . WHILE_STMT
+    (48) STATEMENT -> . FOR_STMT
+    (49) STATEMENT -> . DESCRIBE_STMT
+    (121) empty -> .
+    (55) ASSIGNATION -> . VARIABLE = add_operator EXPRESSION ; add_assignation_quad
+    (56) ASSIGNATION -> . FOR VARIABLE = add_operator EXPRESSION add_assignation_for_quad
+    (57) ASSIGNATION -> . VARIABLE = add_operator FUNC_CALL functions_assignation add_assignation_quad
+    (61) FUNC_CALL -> . FUNC ID era_quad ( EXPRESSION param_quad FUNC_CALL_PRIME ) ; go_sub_quad
+    (91) EXPRESSION -> . AND_EXP EXPRESSION_PRIME
+    (66) WRITE -> . PRINT add_operator ( EXPRESSION print_quad WRITE_PRIME )
+    (67) WRITE -> . PRINT add_operator ( TITLE WRITE_PRIME )
+    (79) CONDITION -> . IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
+    (82) WHILE_STMT -> . WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand
+    (88) FOR_STMT -> . ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO { BLOCK } end_for
+    (89) DESCRIBE_STMT -> . ID . DESCRIBE ( )
+    (25) VARIABLE -> . ID get_variable
+    (26) VARIABLE -> . ID [ EXPRESSION ]
+    (94) AND_EXP -> . B_EXP AND_EXP_PRIME
+    (97) B_EXP -> . TRUE
+    (98) B_EXP -> . FALSE
+    (99) B_EXP -> . EXP B_EXP_PRIME
+    (105) EXP -> . TERM EXP_PRIME
+    (109) TERM -> . FACTOR TERM_PRIME
+    (113) FACTOR -> . ( EXPRESSION )
+    (114) FACTOR -> . * VAR_CT
+    (115) FACTOR -> . / VAR_CT
+    (116) FACTOR -> . VAR_CT
+    (117) VAR_CT -> . ID add_operand
+    (118) VAR_CT -> . I_CONST add_operand
+    (119) VAR_CT -> . F_CONST add_operand
+    (120) VAR_CT -> . C_CONST add_operand
+
+    }               reduce using rule 121 (empty -> .)
+    FOR             shift and go to state 131
+    FUNC            shift and go to state 132
+    PRINT           shift and go to state 133
+    IF              shift and go to state 134
+    WHILE           shift and go to state 135
+    ID              shift and go to state 118
+    TRUE            shift and go to state 53
+    FALSE           shift and go to state 54
+    (               shift and go to state 58
+    *               shift and go to state 59
+    /               shift and go to state 61
+    I_CONST         shift and go to state 62
+    F_CONST         shift and go to state 63
+    C_CONST         shift and go to state 64
+
+    EXPRESSION                     shift and go to state 124
+    BLOCK                          shift and go to state 258
+    STATEMENT                      shift and go to state 120
+    empty                          shift and go to state 121
+    ASSIGNATION                    shift and go to state 122
+    FUNC_CALL                      shift and go to state 123
+    WRITE                          shift and go to state 125
+    CONDITION                      shift and go to state 126
+    WHILE_STMT                     shift and go to state 127
+    FOR_STMT                       shift and go to state 128
+    DESCRIBE_STMT                  shift and go to state 129
+    VARIABLE                       shift and go to state 130
+    AND_EXP                        shift and go to state 51
+    B_EXP                          shift and go to state 52
+    EXP                            shift and go to state 55
+    TERM                           shift and go to state 56
+    FACTOR                         shift and go to state 57
+    VAR_CT                         shift and go to state 60
+
+state 249
+
+    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { . go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand
     (71) go_to_false_quad -> .
 
     FOR             reduce using rule 71 (go_to_false_quad -> .)
@@ -5253,14 +5342,7 @@ state 248
     C_CONST         reduce using rule 71 (go_to_false_quad -> .)
     }               reduce using rule 71 (go_to_false_quad -> .)
 
-    go_to_false_quad               shift and go to state 258
-
-state 249
-
-    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) . { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad
-
-    {               shift and go to state 259
-
+    go_to_false_quad               shift and go to state 259
 
 state 250
 
@@ -5337,7 +5419,14 @@ state 257
 
 state 258
 
-    (79) CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad . BLOCK } fill_go_to_false_quad ELSE_STMT
+    (79) CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK . } fill_go_to_false_quad ELSE_STMT
+
+    }               shift and go to state 268
+
+
+state 259
+
+    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad . BLOCK } fill_go_to_false_quad go_to_quad pop_operand
     (40) BLOCK -> . STATEMENT BLOCK
     (41) BLOCK -> . empty
     (42) STATEMENT -> . ASSIGNATION
@@ -5356,8 +5445,8 @@ state 258
     (91) EXPRESSION -> . AND_EXP EXPRESSION_PRIME
     (66) WRITE -> . PRINT add_operator ( EXPRESSION print_quad WRITE_PRIME )
     (67) WRITE -> . PRINT add_operator ( TITLE WRITE_PRIME )
-    (79) CONDITION -> . IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
-    (82) WHILE_STMT -> . WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad
+    (79) CONDITION -> . IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
+    (82) WHILE_STMT -> . WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand
     (88) FOR_STMT -> . ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO { BLOCK } end_for
     (89) DESCRIBE_STMT -> . ID . DESCRIBE ( )
     (25) VARIABLE -> . ID get_variable
@@ -5394,7 +5483,7 @@ state 258
     C_CONST         shift and go to state 64
 
     EXPRESSION                     shift and go to state 124
-    BLOCK                          shift and go to state 268
+    BLOCK                          shift and go to state 269
     STATEMENT                      shift and go to state 120
     empty                          shift and go to state 121
     ASSIGNATION                    shift and go to state 122
@@ -5411,29 +5500,6 @@ state 258
     TERM                           shift and go to state 56
     FACTOR                         shift and go to state 57
     VAR_CT                         shift and go to state 60
-
-state 259
-
-    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { . go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad
-    (71) go_to_false_quad -> .
-
-    FOR             reduce using rule 71 (go_to_false_quad -> .)
-    FUNC            reduce using rule 71 (go_to_false_quad -> .)
-    PRINT           reduce using rule 71 (go_to_false_quad -> .)
-    IF              reduce using rule 71 (go_to_false_quad -> .)
-    WHILE           reduce using rule 71 (go_to_false_quad -> .)
-    ID              reduce using rule 71 (go_to_false_quad -> .)
-    TRUE            reduce using rule 71 (go_to_false_quad -> .)
-    FALSE           reduce using rule 71 (go_to_false_quad -> .)
-    (               reduce using rule 71 (go_to_false_quad -> .)
-    *               reduce using rule 71 (go_to_false_quad -> .)
-    /               reduce using rule 71 (go_to_false_quad -> .)
-    I_CONST         reduce using rule 71 (go_to_false_quad -> .)
-    F_CONST         reduce using rule 71 (go_to_false_quad -> .)
-    C_CONST         reduce using rule 71 (go_to_false_quad -> .)
-    }               reduce using rule 71 (go_to_false_quad -> .)
-
-    go_to_false_quad               shift and go to state 269
 
 state 260
 
@@ -5555,87 +5621,35 @@ state 267
 
 state 268
 
-    (79) CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK . } fill_go_to_false_quad ELSE_STMT
+    (79) CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } . fill_go_to_false_quad ELSE_STMT
+    (72) fill_go_to_false_quad -> .
 
-    }               shift and go to state 276
+    ELSE            reduce using rule 72 (fill_go_to_false_quad -> .)
+    FOR             reduce using rule 72 (fill_go_to_false_quad -> .)
+    FUNC            reduce using rule 72 (fill_go_to_false_quad -> .)
+    PRINT           reduce using rule 72 (fill_go_to_false_quad -> .)
+    IF              reduce using rule 72 (fill_go_to_false_quad -> .)
+    WHILE           reduce using rule 72 (fill_go_to_false_quad -> .)
+    ID              reduce using rule 72 (fill_go_to_false_quad -> .)
+    TRUE            reduce using rule 72 (fill_go_to_false_quad -> .)
+    FALSE           reduce using rule 72 (fill_go_to_false_quad -> .)
+    (               reduce using rule 72 (fill_go_to_false_quad -> .)
+    *               reduce using rule 72 (fill_go_to_false_quad -> .)
+    /               reduce using rule 72 (fill_go_to_false_quad -> .)
+    I_CONST         reduce using rule 72 (fill_go_to_false_quad -> .)
+    F_CONST         reduce using rule 72 (fill_go_to_false_quad -> .)
+    C_CONST         reduce using rule 72 (fill_go_to_false_quad -> .)
+    }               reduce using rule 72 (fill_go_to_false_quad -> .)
+    RETURN          reduce using rule 72 (fill_go_to_false_quad -> .)
 
+    fill_go_to_false_quad          shift and go to state 276
 
 state 269
 
-    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad . BLOCK } fill_go_to_false_quad go_to_quad
-    (40) BLOCK -> . STATEMENT BLOCK
-    (41) BLOCK -> . empty
-    (42) STATEMENT -> . ASSIGNATION
-    (43) STATEMENT -> . FUNC_CALL
-    (44) STATEMENT -> . EXPRESSION ;
-    (45) STATEMENT -> . WRITE ;
-    (46) STATEMENT -> . CONDITION
-    (47) STATEMENT -> . WHILE_STMT
-    (48) STATEMENT -> . FOR_STMT
-    (49) STATEMENT -> . DESCRIBE_STMT
-    (121) empty -> .
-    (55) ASSIGNATION -> . VARIABLE = add_operator EXPRESSION ; add_assignation_quad
-    (56) ASSIGNATION -> . FOR VARIABLE = add_operator EXPRESSION add_assignation_for_quad
-    (57) ASSIGNATION -> . VARIABLE = add_operator FUNC_CALL functions_assignation add_assignation_quad
-    (61) FUNC_CALL -> . FUNC ID era_quad ( EXPRESSION param_quad FUNC_CALL_PRIME ) ; go_sub_quad
-    (91) EXPRESSION -> . AND_EXP EXPRESSION_PRIME
-    (66) WRITE -> . PRINT add_operator ( EXPRESSION print_quad WRITE_PRIME )
-    (67) WRITE -> . PRINT add_operator ( TITLE WRITE_PRIME )
-    (79) CONDITION -> . IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
-    (82) WHILE_STMT -> . WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad
-    (88) FOR_STMT -> . ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO { BLOCK } end_for
-    (89) DESCRIBE_STMT -> . ID . DESCRIBE ( )
-    (25) VARIABLE -> . ID get_variable
-    (26) VARIABLE -> . ID [ EXPRESSION ]
-    (94) AND_EXP -> . B_EXP AND_EXP_PRIME
-    (97) B_EXP -> . TRUE
-    (98) B_EXP -> . FALSE
-    (99) B_EXP -> . EXP B_EXP_PRIME
-    (105) EXP -> . TERM EXP_PRIME
-    (109) TERM -> . FACTOR TERM_PRIME
-    (113) FACTOR -> . ( EXPRESSION )
-    (114) FACTOR -> . * VAR_CT
-    (115) FACTOR -> . / VAR_CT
-    (116) FACTOR -> . VAR_CT
-    (117) VAR_CT -> . ID add_operand
-    (118) VAR_CT -> . I_CONST add_operand
-    (119) VAR_CT -> . F_CONST add_operand
-    (120) VAR_CT -> . C_CONST add_operand
+    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK . } fill_go_to_false_quad go_to_quad pop_operand
 
-    }               reduce using rule 121 (empty -> .)
-    FOR             shift and go to state 131
-    FUNC            shift and go to state 132
-    PRINT           shift and go to state 133
-    IF              shift and go to state 134
-    WHILE           shift and go to state 135
-    ID              shift and go to state 118
-    TRUE            shift and go to state 53
-    FALSE           shift and go to state 54
-    (               shift and go to state 58
-    *               shift and go to state 59
-    /               shift and go to state 61
-    I_CONST         shift and go to state 62
-    F_CONST         shift and go to state 63
-    C_CONST         shift and go to state 64
+    }               shift and go to state 277
 
-    EXPRESSION                     shift and go to state 124
-    BLOCK                          shift and go to state 277
-    STATEMENT                      shift and go to state 120
-    empty                          shift and go to state 121
-    ASSIGNATION                    shift and go to state 122
-    FUNC_CALL                      shift and go to state 123
-    WRITE                          shift and go to state 125
-    CONDITION                      shift and go to state 126
-    WHILE_STMT                     shift and go to state 127
-    FOR_STMT                       shift and go to state 128
-    DESCRIBE_STMT                  shift and go to state 129
-    VARIABLE                       shift and go to state 130
-    AND_EXP                        shift and go to state 51
-    B_EXP                          shift and go to state 52
-    EXP                            shift and go to state 55
-    TERM                           shift and go to state 56
-    FACTOR                         shift and go to state 57
-    VAR_CT                         shift and go to state 60
 
 state 270
 
@@ -5701,73 +5715,12 @@ state 275
 
 state 276
 
-    (79) CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } . fill_go_to_false_quad ELSE_STMT
-    (72) fill_go_to_false_quad -> .
-
-    ELSE            reduce using rule 72 (fill_go_to_false_quad -> .)
-    FOR             reduce using rule 72 (fill_go_to_false_quad -> .)
-    FUNC            reduce using rule 72 (fill_go_to_false_quad -> .)
-    PRINT           reduce using rule 72 (fill_go_to_false_quad -> .)
-    IF              reduce using rule 72 (fill_go_to_false_quad -> .)
-    WHILE           reduce using rule 72 (fill_go_to_false_quad -> .)
-    ID              reduce using rule 72 (fill_go_to_false_quad -> .)
-    TRUE            reduce using rule 72 (fill_go_to_false_quad -> .)
-    FALSE           reduce using rule 72 (fill_go_to_false_quad -> .)
-    (               reduce using rule 72 (fill_go_to_false_quad -> .)
-    *               reduce using rule 72 (fill_go_to_false_quad -> .)
-    /               reduce using rule 72 (fill_go_to_false_quad -> .)
-    I_CONST         reduce using rule 72 (fill_go_to_false_quad -> .)
-    F_CONST         reduce using rule 72 (fill_go_to_false_quad -> .)
-    C_CONST         reduce using rule 72 (fill_go_to_false_quad -> .)
-    }               reduce using rule 72 (fill_go_to_false_quad -> .)
-    RETURN          reduce using rule 72 (fill_go_to_false_quad -> .)
-
-    fill_go_to_false_quad          shift and go to state 281
-
-state 277
-
-    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK . } fill_go_to_false_quad go_to_quad
-
-    }               shift and go to state 282
-
-
-state 278
-
-    (38) PARAM_PRIME -> , TIPO_SIMPLE ID add_id save_parameter . PARAM_PRIME
-    (38) PARAM_PRIME -> . , TIPO_SIMPLE ID add_id save_parameter PARAM_PRIME
-    (39) PARAM_PRIME -> . empty
-    (121) empty -> .
-
-    ,               shift and go to state 237
-    )               reduce using rule 121 (empty -> .)
-
-    PARAM_PRIME                    shift and go to state 283
-    empty                          shift and go to state 238
-
-state 279
-
-    (33) FUNCTION -> FUNC TIPO_SIMPLE add_function_type ID add_id save_function ( PARAM add_parameters ) { VARS_PRIME BLOCK RETURN EXPRESSION ; . save_function_as_global_variable } empty_local_variables_table
-    (32) save_function_as_global_variable -> .
-
-    }               reduce using rule 32 (save_function_as_global_variable -> .)
-
-    save_function_as_global_variable shift and go to state 284
-
-state 280
-
-    (88) FOR_STMT -> ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO . { BLOCK } end_for
-
-    {               shift and go to state 285
-
-
-state 281
-
-    (79) CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad . ELSE_STMT
+    (79) CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad . ELSE_STMT
     (80) ELSE_STMT -> . ELSE { go_to_true_quad BLOCK } fill_go_to_true_quad
-    (81) ELSE_STMT -> . empty
+    (81) ELSE_STMT -> . empty pop_operand
     (121) empty -> .
 
-    ELSE            shift and go to state 287
+    ELSE            shift and go to state 282
     FOR             reduce using rule 121 (empty -> .)
     FUNC            reduce using rule 121 (empty -> .)
     PRINT           reduce using rule 121 (empty -> .)
@@ -5785,12 +5738,12 @@ state 281
     }               reduce using rule 121 (empty -> .)
     RETURN          reduce using rule 121 (empty -> .)
 
-    ELSE_STMT                      shift and go to state 286
-    empty                          shift and go to state 288
+    ELSE_STMT                      shift and go to state 281
+    empty                          shift and go to state 283
 
-state 282
+state 277
 
-    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } . fill_go_to_false_quad go_to_quad
+    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } . fill_go_to_false_quad go_to_quad pop_operand
     (72) fill_go_to_false_quad -> .
 
     FOR             reduce using rule 72 (fill_go_to_false_quad -> .)
@@ -5810,23 +5763,129 @@ state 282
     }               reduce using rule 72 (fill_go_to_false_quad -> .)
     RETURN          reduce using rule 72 (fill_go_to_false_quad -> .)
 
-    fill_go_to_false_quad          shift and go to state 289
+    fill_go_to_false_quad          shift and go to state 284
+
+state 278
+
+    (38) PARAM_PRIME -> , TIPO_SIMPLE ID add_id save_parameter . PARAM_PRIME
+    (38) PARAM_PRIME -> . , TIPO_SIMPLE ID add_id save_parameter PARAM_PRIME
+    (39) PARAM_PRIME -> . empty
+    (121) empty -> .
+
+    ,               shift and go to state 237
+    )               reduce using rule 121 (empty -> .)
+
+    PARAM_PRIME                    shift and go to state 285
+    empty                          shift and go to state 238
+
+state 279
+
+    (33) FUNCTION -> FUNC TIPO_SIMPLE add_function_type ID add_id save_function ( PARAM add_parameters ) { VARS_PRIME BLOCK RETURN EXPRESSION ; . save_function_as_global_variable } empty_local_variables_table
+    (32) save_function_as_global_variable -> .
+
+    }               reduce using rule 32 (save_function_as_global_variable -> .)
+
+    save_function_as_global_variable shift and go to state 286
+
+state 280
+
+    (88) FOR_STMT -> ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO . { BLOCK } end_for
+
+    {               shift and go to state 287
+
+
+state 281
+
+    (79) CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .
+
+    FOR             reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
+    FUNC            reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
+    PRINT           reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
+    IF              reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
+    WHILE           reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
+    ID              reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
+    TRUE            reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
+    FALSE           reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
+    (               reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
+    *               reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
+    /               reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
+    I_CONST         reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
+    F_CONST         reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
+    C_CONST         reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
+    }               reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
+    RETURN          reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
+
+
+state 282
+
+    (80) ELSE_STMT -> ELSE . { go_to_true_quad BLOCK } fill_go_to_true_quad
+
+    {               shift and go to state 288
+
 
 state 283
+
+    (81) ELSE_STMT -> empty . pop_operand
+    (76) pop_operand -> .
+
+    FOR             reduce using rule 76 (pop_operand -> .)
+    FUNC            reduce using rule 76 (pop_operand -> .)
+    PRINT           reduce using rule 76 (pop_operand -> .)
+    IF              reduce using rule 76 (pop_operand -> .)
+    WHILE           reduce using rule 76 (pop_operand -> .)
+    ID              reduce using rule 76 (pop_operand -> .)
+    TRUE            reduce using rule 76 (pop_operand -> .)
+    FALSE           reduce using rule 76 (pop_operand -> .)
+    (               reduce using rule 76 (pop_operand -> .)
+    *               reduce using rule 76 (pop_operand -> .)
+    /               reduce using rule 76 (pop_operand -> .)
+    I_CONST         reduce using rule 76 (pop_operand -> .)
+    F_CONST         reduce using rule 76 (pop_operand -> .)
+    C_CONST         reduce using rule 76 (pop_operand -> .)
+    }               reduce using rule 76 (pop_operand -> .)
+    RETURN          reduce using rule 76 (pop_operand -> .)
+
+    pop_operand                    shift and go to state 289
+
+state 284
+
+    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad . go_to_quad pop_operand
+    (75) go_to_quad -> .
+
+    FOR             reduce using rule 75 (go_to_quad -> .)
+    FUNC            reduce using rule 75 (go_to_quad -> .)
+    PRINT           reduce using rule 75 (go_to_quad -> .)
+    IF              reduce using rule 75 (go_to_quad -> .)
+    WHILE           reduce using rule 75 (go_to_quad -> .)
+    ID              reduce using rule 75 (go_to_quad -> .)
+    TRUE            reduce using rule 75 (go_to_quad -> .)
+    FALSE           reduce using rule 75 (go_to_quad -> .)
+    (               reduce using rule 75 (go_to_quad -> .)
+    *               reduce using rule 75 (go_to_quad -> .)
+    /               reduce using rule 75 (go_to_quad -> .)
+    I_CONST         reduce using rule 75 (go_to_quad -> .)
+    F_CONST         reduce using rule 75 (go_to_quad -> .)
+    C_CONST         reduce using rule 75 (go_to_quad -> .)
+    }               reduce using rule 75 (go_to_quad -> .)
+    RETURN          reduce using rule 75 (go_to_quad -> .)
+
+    go_to_quad                     shift and go to state 290
+
+state 285
 
     (38) PARAM_PRIME -> , TIPO_SIMPLE ID add_id save_parameter PARAM_PRIME .
 
     )               reduce using rule 38 (PARAM_PRIME -> , TIPO_SIMPLE ID add_id save_parameter PARAM_PRIME .)
 
 
-state 284
+state 286
 
     (33) FUNCTION -> FUNC TIPO_SIMPLE add_function_type ID add_id save_function ( PARAM add_parameters ) { VARS_PRIME BLOCK RETURN EXPRESSION ; save_function_as_global_variable . } empty_local_variables_table
 
-    }               shift and go to state 290
+    }               shift and go to state 291
 
 
-state 285
+state 287
 
     (88) FOR_STMT -> ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO { . BLOCK } end_for
     (40) BLOCK -> . STATEMENT BLOCK
@@ -5847,8 +5906,8 @@ state 285
     (91) EXPRESSION -> . AND_EXP EXPRESSION_PRIME
     (66) WRITE -> . PRINT add_operator ( EXPRESSION print_quad WRITE_PRIME )
     (67) WRITE -> . PRINT add_operator ( TITLE WRITE_PRIME )
-    (79) CONDITION -> . IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
-    (82) WHILE_STMT -> . WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad
+    (79) CONDITION -> . IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
+    (82) WHILE_STMT -> . WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand
     (88) FOR_STMT -> . ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO { BLOCK } end_for
     (89) DESCRIBE_STMT -> . ID . DESCRIBE ( )
     (25) VARIABLE -> . ID get_variable
@@ -5886,7 +5945,7 @@ state 285
 
     ASSIGNATION                    shift and go to state 122
     EXPRESSION                     shift and go to state 124
-    BLOCK                          shift and go to state 291
+    BLOCK                          shift and go to state 292
     STATEMENT                      shift and go to state 120
     empty                          shift and go to state 121
     FUNC_CALL                      shift and go to state 123
@@ -5903,99 +5962,7 @@ state 285
     FACTOR                         shift and go to state 57
     VAR_CT                         shift and go to state 60
 
-state 286
-
-    (79) CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .
-
-    FOR             reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
-    FUNC            reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
-    PRINT           reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
-    IF              reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
-    WHILE           reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
-    ID              reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
-    TRUE            reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
-    FALSE           reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
-    (               reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
-    *               reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
-    /               reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
-    I_CONST         reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
-    F_CONST         reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
-    C_CONST         reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
-    }               reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
-    RETURN          reduce using rule 79 (CONDITION -> IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT .)
-
-
-state 287
-
-    (80) ELSE_STMT -> ELSE . { go_to_true_quad BLOCK } fill_go_to_true_quad
-
-    {               shift and go to state 292
-
-
 state 288
-
-    (81) ELSE_STMT -> empty .
-
-    FOR             reduce using rule 81 (ELSE_STMT -> empty .)
-    FUNC            reduce using rule 81 (ELSE_STMT -> empty .)
-    PRINT           reduce using rule 81 (ELSE_STMT -> empty .)
-    IF              reduce using rule 81 (ELSE_STMT -> empty .)
-    WHILE           reduce using rule 81 (ELSE_STMT -> empty .)
-    ID              reduce using rule 81 (ELSE_STMT -> empty .)
-    TRUE            reduce using rule 81 (ELSE_STMT -> empty .)
-    FALSE           reduce using rule 81 (ELSE_STMT -> empty .)
-    (               reduce using rule 81 (ELSE_STMT -> empty .)
-    *               reduce using rule 81 (ELSE_STMT -> empty .)
-    /               reduce using rule 81 (ELSE_STMT -> empty .)
-    I_CONST         reduce using rule 81 (ELSE_STMT -> empty .)
-    F_CONST         reduce using rule 81 (ELSE_STMT -> empty .)
-    C_CONST         reduce using rule 81 (ELSE_STMT -> empty .)
-    }               reduce using rule 81 (ELSE_STMT -> empty .)
-    RETURN          reduce using rule 81 (ELSE_STMT -> empty .)
-
-
-state 289
-
-    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad . go_to_quad
-    (75) go_to_quad -> .
-
-    FOR             reduce using rule 75 (go_to_quad -> .)
-    FUNC            reduce using rule 75 (go_to_quad -> .)
-    PRINT           reduce using rule 75 (go_to_quad -> .)
-    IF              reduce using rule 75 (go_to_quad -> .)
-    WHILE           reduce using rule 75 (go_to_quad -> .)
-    ID              reduce using rule 75 (go_to_quad -> .)
-    TRUE            reduce using rule 75 (go_to_quad -> .)
-    FALSE           reduce using rule 75 (go_to_quad -> .)
-    (               reduce using rule 75 (go_to_quad -> .)
-    *               reduce using rule 75 (go_to_quad -> .)
-    /               reduce using rule 75 (go_to_quad -> .)
-    I_CONST         reduce using rule 75 (go_to_quad -> .)
-    F_CONST         reduce using rule 75 (go_to_quad -> .)
-    C_CONST         reduce using rule 75 (go_to_quad -> .)
-    }               reduce using rule 75 (go_to_quad -> .)
-    RETURN          reduce using rule 75 (go_to_quad -> .)
-
-    go_to_quad                     shift and go to state 293
-
-state 290
-
-    (33) FUNCTION -> FUNC TIPO_SIMPLE add_function_type ID add_id save_function ( PARAM add_parameters ) { VARS_PRIME BLOCK RETURN EXPRESSION ; save_function_as_global_variable } . empty_local_variables_table
-    (4) empty_local_variables_table -> .
-
-    FUNC            reduce using rule 4 (empty_local_variables_table -> .)
-    VOID            reduce using rule 4 (empty_local_variables_table -> .)
-
-    empty_local_variables_table    shift and go to state 294
-
-state 291
-
-    (88) FOR_STMT -> ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO { BLOCK . } end_for
-
-    }               shift and go to state 295
-
-
-state 292
 
     (80) ELSE_STMT -> ELSE { . go_to_true_quad BLOCK } fill_go_to_true_quad
     (73) go_to_true_quad -> .
@@ -6016,31 +5983,171 @@ state 292
     C_CONST         reduce using rule 73 (go_to_true_quad -> .)
     }               reduce using rule 73 (go_to_true_quad -> .)
 
-    go_to_true_quad                shift and go to state 296
+    go_to_true_quad                shift and go to state 293
+
+state 289
+
+    (81) ELSE_STMT -> empty pop_operand .
+
+    FOR             reduce using rule 81 (ELSE_STMT -> empty pop_operand .)
+    FUNC            reduce using rule 81 (ELSE_STMT -> empty pop_operand .)
+    PRINT           reduce using rule 81 (ELSE_STMT -> empty pop_operand .)
+    IF              reduce using rule 81 (ELSE_STMT -> empty pop_operand .)
+    WHILE           reduce using rule 81 (ELSE_STMT -> empty pop_operand .)
+    ID              reduce using rule 81 (ELSE_STMT -> empty pop_operand .)
+    TRUE            reduce using rule 81 (ELSE_STMT -> empty pop_operand .)
+    FALSE           reduce using rule 81 (ELSE_STMT -> empty pop_operand .)
+    (               reduce using rule 81 (ELSE_STMT -> empty pop_operand .)
+    *               reduce using rule 81 (ELSE_STMT -> empty pop_operand .)
+    /               reduce using rule 81 (ELSE_STMT -> empty pop_operand .)
+    I_CONST         reduce using rule 81 (ELSE_STMT -> empty pop_operand .)
+    F_CONST         reduce using rule 81 (ELSE_STMT -> empty pop_operand .)
+    C_CONST         reduce using rule 81 (ELSE_STMT -> empty pop_operand .)
+    }               reduce using rule 81 (ELSE_STMT -> empty pop_operand .)
+    RETURN          reduce using rule 81 (ELSE_STMT -> empty pop_operand .)
+
+
+state 290
+
+    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad . pop_operand
+    (76) pop_operand -> .
+
+    FOR             reduce using rule 76 (pop_operand -> .)
+    FUNC            reduce using rule 76 (pop_operand -> .)
+    PRINT           reduce using rule 76 (pop_operand -> .)
+    IF              reduce using rule 76 (pop_operand -> .)
+    WHILE           reduce using rule 76 (pop_operand -> .)
+    ID              reduce using rule 76 (pop_operand -> .)
+    TRUE            reduce using rule 76 (pop_operand -> .)
+    FALSE           reduce using rule 76 (pop_operand -> .)
+    (               reduce using rule 76 (pop_operand -> .)
+    *               reduce using rule 76 (pop_operand -> .)
+    /               reduce using rule 76 (pop_operand -> .)
+    I_CONST         reduce using rule 76 (pop_operand -> .)
+    F_CONST         reduce using rule 76 (pop_operand -> .)
+    C_CONST         reduce using rule 76 (pop_operand -> .)
+    }               reduce using rule 76 (pop_operand -> .)
+    RETURN          reduce using rule 76 (pop_operand -> .)
+
+    pop_operand                    shift and go to state 294
+
+state 291
+
+    (33) FUNCTION -> FUNC TIPO_SIMPLE add_function_type ID add_id save_function ( PARAM add_parameters ) { VARS_PRIME BLOCK RETURN EXPRESSION ; save_function_as_global_variable } . empty_local_variables_table
+    (4) empty_local_variables_table -> .
+
+    FUNC            reduce using rule 4 (empty_local_variables_table -> .)
+    VOID            reduce using rule 4 (empty_local_variables_table -> .)
+
+    empty_local_variables_table    shift and go to state 295
+
+state 292
+
+    (88) FOR_STMT -> ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO { BLOCK . } end_for
+
+    }               shift and go to state 296
+
 
 state 293
 
-    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad .
+    (80) ELSE_STMT -> ELSE { go_to_true_quad . BLOCK } fill_go_to_true_quad
+    (40) BLOCK -> . STATEMENT BLOCK
+    (41) BLOCK -> . empty
+    (42) STATEMENT -> . ASSIGNATION
+    (43) STATEMENT -> . FUNC_CALL
+    (44) STATEMENT -> . EXPRESSION ;
+    (45) STATEMENT -> . WRITE ;
+    (46) STATEMENT -> . CONDITION
+    (47) STATEMENT -> . WHILE_STMT
+    (48) STATEMENT -> . FOR_STMT
+    (49) STATEMENT -> . DESCRIBE_STMT
+    (121) empty -> .
+    (55) ASSIGNATION -> . VARIABLE = add_operator EXPRESSION ; add_assignation_quad
+    (56) ASSIGNATION -> . FOR VARIABLE = add_operator EXPRESSION add_assignation_for_quad
+    (57) ASSIGNATION -> . VARIABLE = add_operator FUNC_CALL functions_assignation add_assignation_quad
+    (61) FUNC_CALL -> . FUNC ID era_quad ( EXPRESSION param_quad FUNC_CALL_PRIME ) ; go_sub_quad
+    (91) EXPRESSION -> . AND_EXP EXPRESSION_PRIME
+    (66) WRITE -> . PRINT add_operator ( EXPRESSION print_quad WRITE_PRIME )
+    (67) WRITE -> . PRINT add_operator ( TITLE WRITE_PRIME )
+    (79) CONDITION -> . IF ( EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
+    (82) WHILE_STMT -> . WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand
+    (88) FOR_STMT -> . ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO { BLOCK } end_for
+    (89) DESCRIBE_STMT -> . ID . DESCRIBE ( )
+    (25) VARIABLE -> . ID get_variable
+    (26) VARIABLE -> . ID [ EXPRESSION ]
+    (94) AND_EXP -> . B_EXP AND_EXP_PRIME
+    (97) B_EXP -> . TRUE
+    (98) B_EXP -> . FALSE
+    (99) B_EXP -> . EXP B_EXP_PRIME
+    (105) EXP -> . TERM EXP_PRIME
+    (109) TERM -> . FACTOR TERM_PRIME
+    (113) FACTOR -> . ( EXPRESSION )
+    (114) FACTOR -> . * VAR_CT
+    (115) FACTOR -> . / VAR_CT
+    (116) FACTOR -> . VAR_CT
+    (117) VAR_CT -> . ID add_operand
+    (118) VAR_CT -> . I_CONST add_operand
+    (119) VAR_CT -> . F_CONST add_operand
+    (120) VAR_CT -> . C_CONST add_operand
 
-    FOR             reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad .)
-    FUNC            reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad .)
-    PRINT           reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad .)
-    IF              reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad .)
-    WHILE           reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad .)
-    ID              reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad .)
-    TRUE            reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad .)
-    FALSE           reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad .)
-    (               reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad .)
-    *               reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad .)
-    /               reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad .)
-    I_CONST         reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad .)
-    F_CONST         reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad .)
-    C_CONST         reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad .)
-    }               reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad .)
-    RETURN          reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad .)
+    }               reduce using rule 121 (empty -> .)
+    FOR             shift and go to state 131
+    FUNC            shift and go to state 132
+    PRINT           shift and go to state 133
+    IF              shift and go to state 134
+    WHILE           shift and go to state 135
+    ID              shift and go to state 118
+    TRUE            shift and go to state 53
+    FALSE           shift and go to state 54
+    (               shift and go to state 58
+    *               shift and go to state 59
+    /               shift and go to state 61
+    I_CONST         shift and go to state 62
+    F_CONST         shift and go to state 63
+    C_CONST         shift and go to state 64
 
+    BLOCK                          shift and go to state 297
+    STATEMENT                      shift and go to state 120
+    empty                          shift and go to state 121
+    ASSIGNATION                    shift and go to state 122
+    FUNC_CALL                      shift and go to state 123
+    EXPRESSION                     shift and go to state 124
+    WRITE                          shift and go to state 125
+    CONDITION                      shift and go to state 126
+    WHILE_STMT                     shift and go to state 127
+    FOR_STMT                       shift and go to state 128
+    DESCRIBE_STMT                  shift and go to state 129
+    VARIABLE                       shift and go to state 130
+    AND_EXP                        shift and go to state 51
+    B_EXP                          shift and go to state 52
+    EXP                            shift and go to state 55
+    TERM                           shift and go to state 56
+    FACTOR                         shift and go to state 57
+    VAR_CT                         shift and go to state 60
 
 state 294
+
+    (82) WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand .
+
+    FOR             reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand .)
+    FUNC            reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand .)
+    PRINT           reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand .)
+    IF              reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand .)
+    WHILE           reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand .)
+    ID              reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand .)
+    TRUE            reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand .)
+    FALSE           reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand .)
+    (               reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand .)
+    *               reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand .)
+    /               reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand .)
+    I_CONST         reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand .)
+    F_CONST         reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand .)
+    C_CONST         reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand .)
+    }               reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand .)
+    RETURN          reduce using rule 82 (WHILE_STMT -> WHILE ( append_jump EXPRESSION pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad pop_operand .)
+
+
+state 295
 
     (33) FUNCTION -> FUNC TIPO_SIMPLE add_function_type ID add_id save_function ( PARAM add_parameters ) { VARS_PRIME BLOCK RETURN EXPRESSION ; save_function_as_global_variable } empty_local_variables_table .
 
@@ -6048,7 +6155,7 @@ state 294
     VOID            reduce using rule 33 (FUNCTION -> FUNC TIPO_SIMPLE add_function_type ID add_id save_function ( PARAM add_parameters ) { VARS_PRIME BLOCK RETURN EXPRESSION ; save_function_as_global_variable } empty_local_variables_table .)
 
 
-state 295
+state 296
 
     (88) FOR_STMT -> ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO { BLOCK } . end_for
     (87) end_for -> .
@@ -6070,86 +6177,16 @@ state 295
     }               reduce using rule 87 (end_for -> .)
     RETURN          reduce using rule 87 (end_for -> .)
 
-    end_for                        shift and go to state 297
-
-state 296
-
-    (80) ELSE_STMT -> ELSE { go_to_true_quad . BLOCK } fill_go_to_true_quad
-    (40) BLOCK -> . STATEMENT BLOCK
-    (41) BLOCK -> . empty
-    (42) STATEMENT -> . ASSIGNATION
-    (43) STATEMENT -> . FUNC_CALL
-    (44) STATEMENT -> . EXPRESSION ;
-    (45) STATEMENT -> . WRITE ;
-    (46) STATEMENT -> . CONDITION
-    (47) STATEMENT -> . WHILE_STMT
-    (48) STATEMENT -> . FOR_STMT
-    (49) STATEMENT -> . DESCRIBE_STMT
-    (121) empty -> .
-    (55) ASSIGNATION -> . VARIABLE = add_operator EXPRESSION ; add_assignation_quad
-    (56) ASSIGNATION -> . FOR VARIABLE = add_operator EXPRESSION add_assignation_for_quad
-    (57) ASSIGNATION -> . VARIABLE = add_operator FUNC_CALL functions_assignation add_assignation_quad
-    (61) FUNC_CALL -> . FUNC ID era_quad ( EXPRESSION param_quad FUNC_CALL_PRIME ) ; go_sub_quad
-    (91) EXPRESSION -> . AND_EXP EXPRESSION_PRIME
-    (66) WRITE -> . PRINT add_operator ( EXPRESSION print_quad WRITE_PRIME )
-    (67) WRITE -> . PRINT add_operator ( TITLE WRITE_PRIME )
-    (79) CONDITION -> . IF ( EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad ELSE_STMT
-    (82) WHILE_STMT -> . WHILE ( append_jump EXPRESSION pop_operand pop_type ) { go_to_false_quad BLOCK } fill_go_to_false_quad go_to_quad
-    (88) FOR_STMT -> . ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO { BLOCK } end_for
-    (89) DESCRIBE_STMT -> . ID . DESCRIBE ( )
-    (25) VARIABLE -> . ID get_variable
-    (26) VARIABLE -> . ID [ EXPRESSION ]
-    (94) AND_EXP -> . B_EXP AND_EXP_PRIME
-    (97) B_EXP -> . TRUE
-    (98) B_EXP -> . FALSE
-    (99) B_EXP -> . EXP B_EXP_PRIME
-    (105) EXP -> . TERM EXP_PRIME
-    (109) TERM -> . FACTOR TERM_PRIME
-    (113) FACTOR -> . ( EXPRESSION )
-    (114) FACTOR -> . * VAR_CT
-    (115) FACTOR -> . / VAR_CT
-    (116) FACTOR -> . VAR_CT
-    (117) VAR_CT -> . ID add_operand
-    (118) VAR_CT -> . I_CONST add_operand
-    (119) VAR_CT -> . F_CONST add_operand
-    (120) VAR_CT -> . C_CONST add_operand
-
-    }               reduce using rule 121 (empty -> .)
-    FOR             shift and go to state 131
-    FUNC            shift and go to state 132
-    PRINT           shift and go to state 133
-    IF              shift and go to state 134
-    WHILE           shift and go to state 135
-    ID              shift and go to state 118
-    TRUE            shift and go to state 53
-    FALSE           shift and go to state 54
-    (               shift and go to state 58
-    *               shift and go to state 59
-    /               shift and go to state 61
-    I_CONST         shift and go to state 62
-    F_CONST         shift and go to state 63
-    C_CONST         shift and go to state 64
-
-    BLOCK                          shift and go to state 298
-    STATEMENT                      shift and go to state 120
-    empty                          shift and go to state 121
-    ASSIGNATION                    shift and go to state 122
-    FUNC_CALL                      shift and go to state 123
-    EXPRESSION                     shift and go to state 124
-    WRITE                          shift and go to state 125
-    CONDITION                      shift and go to state 126
-    WHILE_STMT                     shift and go to state 127
-    FOR_STMT                       shift and go to state 128
-    DESCRIBE_STMT                  shift and go to state 129
-    VARIABLE                       shift and go to state 130
-    AND_EXP                        shift and go to state 51
-    B_EXP                          shift and go to state 52
-    EXP                            shift and go to state 55
-    TERM                           shift and go to state 56
-    FACTOR                         shift and go to state 57
-    VAR_CT                         shift and go to state 60
+    end_for                        shift and go to state 298
 
 state 297
+
+    (80) ELSE_STMT -> ELSE { go_to_true_quad BLOCK . } fill_go_to_true_quad
+
+    }               shift and go to state 299
+
+
+state 298
 
     (88) FOR_STMT -> ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO { BLOCK } end_for .
 
@@ -6169,13 +6206,6 @@ state 297
     C_CONST         reduce using rule 88 (FOR_STMT -> ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO { BLOCK } end_for .)
     }               reduce using rule 88 (FOR_STMT -> ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO { BLOCK } end_for .)
     RETURN          reduce using rule 88 (FOR_STMT -> ASSIGNATION check_exact_type_for TO ( EXPRESSION check_exact_type_for add_final_counter_for check_boolean_expression_for ) generate_for_quad DO { BLOCK } end_for .)
-
-
-state 298
-
-    (80) ELSE_STMT -> ELSE { go_to_true_quad BLOCK . } fill_go_to_true_quad
-
-    }               shift and go to state 299
 
 
 state 299
