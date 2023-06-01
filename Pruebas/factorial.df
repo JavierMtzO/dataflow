@@ -1,0 +1,20 @@
+program factorial_program; 
+
+var int n, result;
+
+func int factorial(int n) {
+    var int fact;
+    if( n == 0 ){
+        fact = 1;
+    }
+    else {
+        fact = n * func factorial(n - 1);
+    }
+    return fact ;
+}
+
+void main {
+    n = 5;
+    result = func factorial(n);
+    print(result);
+}

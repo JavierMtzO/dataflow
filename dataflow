@@ -33,9 +33,12 @@ def check_if_global_variable(virtual_address: int):
 def virtual_machine(resources:str, constant_dict:str):
     global_memory = Runtime_Memory(resources, constant_dict)
     memories = deque()
+    migajita_de_pan = deque()
     memories.append(global_memory)
     quadruples = semantics.quadruples
     ip = 0
+    local_memories = {}
+    local_memories_counter = 1
     print('\nSTART OF DATAFLOW PROGRAM \n')
 
     while (True):
@@ -73,6 +76,10 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 left_operand = current_memory.return_content(current_quad.left_operand)
+                if left_operand is None:
+                    next_current_memory = memories.pop()
+                    left_operand = next_current_memory.return_content(current_quad.left_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
             if check_if_global_variable(current_quad.right_operand):
                 current_memory = memories.popleft()
@@ -81,7 +88,13 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 right_operand = current_memory.return_content(current_quad.right_operand)
+                if right_operand is None:
+                    next_current_memory = memories.pop()
+                    right_operand = next_current_memory.return_content(current_quad.right_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
+                
+            current_memory = memories.pop()
             result = left_operand - right_operand
             current_memory.assign_content_value(current_quad.result, result)
             ip += 1
@@ -174,6 +187,28 @@ def virtual_machine(resources:str, constant_dict:str):
             current_memory.assign_content_value(current_quad.result, result)
             ip += 1
             memories.append(current_memory)
+        
+        elif current_quad.op_code == '>=':
+            if check_if_global_variable(current_quad.left_operand):
+                current_memory = memories.popleft()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                left_operand = current_memory.return_content(current_quad.left_operand)
+                memories.append(current_memory)
+            if check_if_global_variable(current_quad.right_operand):
+                current_memory = memories.popleft()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.appendleft(current_memory)
+            else:
+                current_memory = memories.pop()
+                right_operand = current_memory.return_content(current_quad.right_operand)
+                memories.append(current_memory)
+            result = left_operand <= right_operand
+            current_memory.assign_content_value(current_quad.result, result)
+            ip += 1
+            memories.append(current_memory)
 
         elif current_quad.op_code == '<':
             if check_if_global_variable(current_quad.left_operand):
@@ -214,7 +249,8 @@ def virtual_machine(resources:str, constant_dict:str):
                 current_memory = memories.pop()
                 right_operand = current_memory.return_content(current_quad.right_operand)
                 memories.append(current_memory)
-            result = left_operand > right_operand
+            current_memory = memories.pop()
+            result = left_operand == right_operand
             current_memory.assign_content_value(current_quad.result, result)
             ip += 1
             memories.append(current_memory)
@@ -285,7 +321,6 @@ def virtual_machine(resources:str, constant_dict:str):
                 current_memory.assign_content(current_quad.result, current_memory.return_content(current_quad.left_operand))
                 memories.append(current_memory)
             ip += 1
-            memories.append(current_memory)
 
         elif current_quad.op_code == 'print':
             if check_if_global_variable(current_quad.result):
@@ -321,7 +356,33 @@ def virtual_machine(resources:str, constant_dict:str):
                 ip = current_quad.result
             else:
                 ip += 1
-    
+        
+        elif current_quad.op_code == 'era':
+            local_memory = f"local_memory[{local_memories_counter}]"
+            local_memories[local_memory] = Runtime_Memory(current_quad.result, constant_dict)
+            local_memories_counter += 1
+            memories.append(local_memories[local_memory])
+            ip += 1
+
+        elif current_quad.op_code == 'param':
+            if check_if_global_variable(current_quad.left_operand):
+                local_memory = memories.pop()
+                global_memory = memories.popleft()
+                local_memory.assign_content(current_quad.result, global_memory.return_content(current_quad.left_operand))
+                memories.append(local_memory)
+                memories.appendleft(global_memory)
+            else:
+                current_memory = memories.pop()
+                current_memory.assign_content(current_quad.result, current_memory.return_content(current_quad.left_operand))
+                memories.append(current_memory)
+            ip += 1
+        
+        elif current_quad.op_code == 'gosub':
+            migajita_de_pan.append(ip+1)
+            ip = current_quad.result
+        
+
+
     print('\nEND OF DATAFLOW PROGRAM')
 
 
@@ -347,4 +408,4 @@ if __name__ == '__main__':
         for quad in semantics.quadruples:
             print(f'{i}. {quad.print_quadruple()}')
             i+=1
-        # virtual_machine(semantics.final_global_mem, semantics.final_global_constant_dict)
+        virtual_machine(semantics.final_global_mem, semantics.final_global_constant_dict)

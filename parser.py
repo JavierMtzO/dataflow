@@ -116,13 +116,17 @@ def p_add_function_type(p):
     '''add_function_type : '''
     semantics.add_function_type()
 
-def p_save_function_as_global_variable(p):
-    '''save_function_as_global_variable : '''
-    semantics.save_function_as_global_variable()
+def p_save_function_as_variable(p):
+    '''save_function_as_variable : '''
+    semantics.save_function_as_variable()
+
+def p_return_quad(p):
+    '''return_quad : '''
+    semantics.return_quad()
 
 def p_FUNCTION(p):
     '''
-    FUNCTION : FUNC TIPO_SIMPLE add_function_type ID add_id save_function '(' PARAM add_parameters ')' '{' VARS_PRIME BLOCK RETURN EXPRESSION ';' save_function_as_global_variable '}' empty_local_variables_table
+    FUNCTION : FUNC TIPO_SIMPLE add_function_type ID add_id save_function '(' PARAM add_parameters ')' save_function_as_variable '{' VARS_PRIME BLOCK RETURN EXPRESSION ';' return_quad '}' empty_local_variables_table
              | FUNC VOID add_type ID add_id save_function '(' PARAM add_parameters ')' '{' VARS_PRIME BLOCK '}' empty_local_variables_table
     '''
     pass
@@ -207,7 +211,7 @@ def p_go_sub_quad(p):
 
 def p_FUNC_CALL(p):
     '''
-    FUNC_CALL : FUNC ID era_quad '(' EXPRESSION param_quad FUNC_CALL_PRIME ')' ';' go_sub_quad
+    FUNC_CALL : FUNC ID era_quad '(' EXPRESSION param_quad FUNC_CALL_PRIME ')' go_sub_quad
     '''
     pass
 
@@ -415,6 +419,7 @@ def p_VAR_CT(p):
            | I_CONST add_operand
            | F_CONST add_operand
            | C_CONST add_operand
+           | FUNC_CALL
     '''
     pass
 

@@ -1,10 +1,10 @@
 program pelos; 
 
-var int i, j, k; 
+var int i, j, k;
 
 func int uno(int j) {
     var int i;
-    var float k;
+    var float k, s;
     i = j + (2 - j * 2 + j);
     if (j > 0){
         j = 4 + 8;
@@ -29,4 +29,6 @@ void main {
     i = 5;
     j = i * 2 + i;
     func dos(j - i, j + 6 - 3);
+    k = func uno(i + 3);
+    print(k);
 }
