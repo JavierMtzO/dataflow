@@ -25,6 +25,7 @@ class Semantics:
     temp_for_counter = 1
     current_scope = "global"
     parameters_list = []
+    era_stack = deque()
 
     global_variables_table = Variables_Table()
     local_variables_table = Variables_Table()
@@ -111,7 +112,8 @@ class Semantics:
         operand_virtual_direction = self.local_variables_table.get_virtual_memory(name=operand)
         if operand_virtual_direction == -1:   
             operand_virtual_direction = self.global_variables_table.get_virtual_memory(name=operand)
-        quadruple = Quadruple(operation=operator, result=operand_virtual_direction)
+        function_variable_virtual_memory = self.global_variables_table.get_virtual_memory(name=name)
+        quadruple = Quadruple(operation=operator, left_operand=operand_virtual_direction, result=function_variable_virtual_memory)
         self.append_quad(quadruple)
     
     def save_function_as_variable(self) -> None:
@@ -258,10 +260,6 @@ class Semantics:
     def fill_go_to_main_quad(self,  jumps:int=1) -> None:
         index = self.jumps_stack.pop()
         self.quadruples[index].result = self.quadruple_counter
-
-    def fill_go_to_false_quad(self,  jumps:int=1) -> None:
-        index = self.jumps_stack.pop()
-        self.quadruples[index].result = self.quadruple_counter + jumps
     
     def fill_go_to_true_quad(self, jumps:int=0) -> None:
         index = self.jumps_stack.pop()
@@ -331,6 +329,10 @@ class Semantics:
         current_function = self.functions_directory.get_current_function()
         self.functions_directory.push_variables_types_used(name=current_function, types_array=types_array)
         quadruple = Quadruple(operation='endfunc')
+        resources = self.functions_directory.get_variables_types_used(current_function)
+        while self.era_stack:
+            index = self.era_stack.pop()
+            self.quadruples[index].result = resources
         self.append_quad(quadruple)
         self.virtual_memory.restart_local_memory()
     
@@ -354,13 +356,12 @@ class Semantics:
     
     def era_quad(self, current_function:str) -> None:
         self.current_function = current_function
+        
         if self.functions_directory.lookup_function(name=current_function):
             resources = self.functions_directory.get_variables_types_used(current_function)
             if not isinstance(resources, str):
                 if np.isnan(resources):
-                    types_array = self.local_variables_table.get_types_counter_list(is_local=True)
-                    self.functions_directory.push_variables_types_used(name=current_function, types_array=types_array)
-                    resources = self.functions_directory.get_variables_types_used(current_function)
+                    self.era_stack.append(self.quadruple_counter)
             quadruple = Quadruple(operation='era', result=resources)
             self.append_quad(quadruple)
             # Get parameters string, convert it to list and finally to a deque
@@ -389,12 +390,8 @@ class Semantics:
         self.virtual_memory.restart_parameters()
         quadruple = Quadruple(operation='gosub', result=self.function_dir)
         self.append_quad(quadruple)
-        if self.current_scope == "local":
-            temp_var_type = self.local_variables_table.get_type(name=self.current_function)
-            function_virtual_direction = self.local_variables_table.get_virtual_memory(name=self.current_function)
-        if self.current_scope == "global":
-            temp_var_type = self.global_variables_table.get_type(name=self.current_function)
-            function_virtual_direction = self.global_variables_table.get_virtual_memory(name=self.current_function)
+        temp_var_type = self.global_variables_table.get_type(name=self.current_function)
+        function_virtual_direction = self.global_variables_table.get_virtual_memory(name=self.current_function)
         temporal_variable = f"t{self.temp_variables_counter}"
         self.temp_variables_counter += 1
         operator = '='

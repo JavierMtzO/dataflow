@@ -1,0 +1,25 @@
+program cyclical_fibonacci_program; 
+
+var int n, result;
+
+func int fibonacci(int n){
+    
+    var int i, current, next, aux;
+    current = 0;
+    next = 1;
+
+    for i = 1 to (n+1) do {
+        aux = current;
+        current = next;
+        next = next + aux;
+        i = i + 1;
+    }
+
+    return aux;
+}
+
+void main {
+    n = 20;
+    result = func fibonacci(n);
+    print(result);
+}

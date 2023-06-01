@@ -251,7 +251,11 @@ def p_go_to_false_quad(p):
 
 def p_fill_go_to_false_quad(p):
     '''fill_go_to_false_quad : '''
-    semantics.fill_go_to_false_quad() 
+    semantics.fill_go_to_false_quad()
+
+def p_fill_go_to_false_quad_if(p):
+    '''fill_go_to_false_quad_if : '''
+    semantics.fill_go_to_false_quad(jumps=0) 
 
 def p_go_to_true_quad(p):
     '''go_to_true_quad : '''
@@ -279,7 +283,7 @@ def p_append_jump(p):
 
 def p_CONDITION(p):
     '''
-    CONDITION : IF '(' EXPRESSION pop_type ')' '{' go_to_false_quad BLOCK '}' fill_go_to_false_quad ELSE_STMT
+    CONDITION : IF '(' EXPRESSION pop_type ')' '{' go_to_false_quad BLOCK '}' fill_go_to_false_quad_if ELSE_STMT
     '''
     pass
 

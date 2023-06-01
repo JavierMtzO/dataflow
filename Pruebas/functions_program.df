@@ -25,7 +25,6 @@ func void dos(int i, int j) {
     }
 }
 void main {
-    print(k);
     i = 5;
     j = i * 2 + i;
     func dos(j - i, j + 6 - 3);

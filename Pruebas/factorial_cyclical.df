@@ -1,0 +1,13 @@
+program cyclical_factorial_program; 
+
+var int n, result, i;
+
+void main {
+    n = 5;
+    result = 1;
+    for i = 1 to (n) do {
+        result = result * i;
+        i = i + 1;
+    }
+    print(result);
+}

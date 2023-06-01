@@ -43,6 +43,7 @@ def virtual_machine(resources:str, constant_dict:str):
 
     while (True):
         current_quad = quadruples[ip]
+        
         if current_quad.op_code == 'endprogram':
             break
 
@@ -54,6 +55,10 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 left_operand = current_memory.return_content(current_quad.left_operand)
+                if left_operand is None:
+                    next_current_memory = memories.pop()
+                    left_operand = next_current_memory.return_content(current_quad.left_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
             if check_if_global_variable(current_quad.right_operand):
                 current_memory = memories.popleft()
@@ -62,7 +67,13 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 right_operand = current_memory.return_content(current_quad.right_operand)
+                if right_operand is None:
+                    next_current_memory = memories.pop()
+                    right_operand = next_current_memory.return_content(current_quad.right_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
+                
+            current_memory = memories.pop()
             result = left_operand + right_operand
             current_memory.assign_content_value(current_quad.result, result)
             ip += 1
@@ -108,6 +119,10 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 left_operand = current_memory.return_content(current_quad.left_operand)
+                if left_operand is None:
+                    next_current_memory = memories.pop()
+                    left_operand = next_current_memory.return_content(current_quad.left_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
             if check_if_global_variable(current_quad.right_operand):
                 current_memory = memories.popleft()
@@ -116,7 +131,13 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 right_operand = current_memory.return_content(current_quad.right_operand)
+                if right_operand is None:
+                    next_current_memory = memories.pop()
+                    right_operand = next_current_memory.return_content(current_quad.right_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
+                
+            current_memory = memories.pop()
             result = left_operand * right_operand
             current_memory.assign_content_value(current_quad.result, result)
             ip += 1
@@ -130,6 +151,10 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 left_operand = current_memory.return_content(current_quad.left_operand)
+                if left_operand is None:
+                    next_current_memory = memories.pop()
+                    left_operand = next_current_memory.return_content(current_quad.left_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
             if check_if_global_variable(current_quad.right_operand):
                 current_memory = memories.popleft()
@@ -138,7 +163,13 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 right_operand = current_memory.return_content(current_quad.right_operand)
+                if right_operand is None:
+                    next_current_memory = memories.pop()
+                    right_operand = next_current_memory.return_content(current_quad.right_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
+                
+            current_memory = memories.pop()
             result = left_operand / right_operand
             current_memory.assign_content_value(current_quad.result, result)
             ip += 1
@@ -152,6 +183,10 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 left_operand = current_memory.return_content(current_quad.left_operand)
+                if left_operand is None:
+                    next_current_memory = memories.pop()
+                    left_operand = next_current_memory.return_content(current_quad.left_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
             if check_if_global_variable(current_quad.right_operand):
                 current_memory = memories.popleft()
@@ -160,7 +195,13 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 right_operand = current_memory.return_content(current_quad.right_operand)
+                if right_operand is None:
+                    next_current_memory = memories.pop()
+                    right_operand = next_current_memory.return_content(current_quad.right_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
+                
+            current_memory = memories.pop()
             result = left_operand > right_operand
             current_memory.assign_content_value(current_quad.result, result)
             ip += 1
@@ -174,6 +215,10 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 left_operand = current_memory.return_content(current_quad.left_operand)
+                if left_operand is None:
+                    next_current_memory = memories.pop()
+                    left_operand = next_current_memory.return_content(current_quad.left_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
             if check_if_global_variable(current_quad.right_operand):
                 current_memory = memories.popleft()
@@ -182,7 +227,13 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 right_operand = current_memory.return_content(current_quad.right_operand)
+                if right_operand is None:
+                    next_current_memory = memories.pop()
+                    right_operand = next_current_memory.return_content(current_quad.right_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
+                
+            current_memory = memories.pop()
             result = left_operand <= right_operand
             current_memory.assign_content_value(current_quad.result, result)
             ip += 1
@@ -196,6 +247,10 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 left_operand = current_memory.return_content(current_quad.left_operand)
+                if left_operand is None:
+                    next_current_memory = memories.pop()
+                    left_operand = next_current_memory.return_content(current_quad.left_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
             if check_if_global_variable(current_quad.right_operand):
                 current_memory = memories.popleft()
@@ -204,8 +259,14 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 right_operand = current_memory.return_content(current_quad.right_operand)
+                if right_operand is None:
+                    next_current_memory = memories.pop()
+                    right_operand = next_current_memory.return_content(current_quad.right_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
-            result = left_operand <= right_operand
+                
+            current_memory = memories.pop()
+            result = left_operand >= right_operand
             current_memory.assign_content_value(current_quad.result, result)
             ip += 1
             memories.append(current_memory)
@@ -218,6 +279,10 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 left_operand = current_memory.return_content(current_quad.left_operand)
+                if left_operand is None:
+                    next_current_memory = memories.pop()
+                    left_operand = next_current_memory.return_content(current_quad.left_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
             if check_if_global_variable(current_quad.right_operand):
                 current_memory = memories.popleft()
@@ -226,8 +291,14 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 right_operand = current_memory.return_content(current_quad.right_operand)
+                if right_operand is None:
+                    next_current_memory = memories.pop()
+                    right_operand < next_current_memory.return_content(current_quad.right_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
-            result = left_operand < right_operand
+                
+            current_memory = memories.pop()
+            result = left_operand - right_operand
             current_memory.assign_content_value(current_quad.result, result)
             ip += 1
             memories.append(current_memory)
@@ -240,6 +311,10 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 left_operand = current_memory.return_content(current_quad.left_operand)
+                if left_operand is None:
+                    next_current_memory = memories.pop()
+                    left_operand = next_current_memory.return_content(current_quad.left_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
             if check_if_global_variable(current_quad.right_operand):
                 current_memory = memories.popleft()
@@ -248,9 +323,16 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 right_operand = current_memory.return_content(current_quad.right_operand)
+                if right_operand is None:
+                    next_current_memory = memories.pop()
+                    right_operand = next_current_memory.return_content(current_quad.right_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
+                
             current_memory = memories.pop()
             result = left_operand == right_operand
+            # if len(migajita_de_pan) > 2 and right_operand == 1:
+            #     import pdb; pdb.set_trace()
             current_memory.assign_content_value(current_quad.result, result)
             ip += 1
             memories.append(current_memory)
@@ -263,6 +345,10 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 left_operand = current_memory.return_content(current_quad.left_operand)
+                if left_operand is None:
+                    next_current_memory = memories.pop()
+                    left_operand = next_current_memory.return_content(current_quad.left_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
             if check_if_global_variable(current_quad.right_operand):
                 current_memory = memories.popleft()
@@ -271,7 +357,13 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 right_operand = current_memory.return_content(current_quad.right_operand)
+                if right_operand is None:
+                    next_current_memory = memories.pop()
+                    right_operand = next_current_memory.return_content(current_quad.right_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
+                
+            current_memory = memories.pop()
             result = left_operand and right_operand
             current_memory.assign_content_value(current_quad.result, result)
             ip += 1
@@ -285,6 +377,10 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 left_operand = current_memory.return_content(current_quad.left_operand)
+                if left_operand is None:
+                    next_current_memory = memories.pop()
+                    left_operand = next_current_memory.return_content(current_quad.left_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
             if check_if_global_variable(current_quad.right_operand):
                 current_memory = memories.popleft()
@@ -293,32 +389,34 @@ def virtual_machine(resources:str, constant_dict:str):
             else:
                 current_memory = memories.pop()
                 right_operand = current_memory.return_content(current_quad.right_operand)
+                if right_operand is None:
+                    next_current_memory = memories.pop()
+                    right_operand = next_current_memory.return_content(current_quad.right_operand)
+                    memories.append(next_current_memory)
                 memories.append(current_memory)
+                
+            current_memory = memories.pop()
             result = left_operand or right_operand
             current_memory.assign_content_value(current_quad.result, result)
             ip += 1
             memories.append(current_memory)
 
         elif current_quad.op_code == '=':
-            if check_if_global_variable(current_quad.result) and check_if_global_variable(current_quad.left_operand):
-                current_memory = memories.popleft()
-                current_memory.assign_content(current_quad.result, current_memory.return_content(current_quad.left_operand))
-                memories.appendleft(current_memory)
-            elif check_if_global_variable(current_quad.result) and not check_if_global_variable(current_quad.left_operand):
-                local_memory = memories.pop()
+            if check_if_global_variable(current_quad.left_operand):
                 global_memory = memories.popleft()
-                global_memory.assign_content(current_quad.result, local_memory.return_content(current_quad.left_operand))
-                memories.append(local_memory)
-                memories.appendleft(global_memory)
-            if check_if_global_variable(current_quad.left_operand) and not check_if_global_variable(current_quad.result):
-                local_memory = memories.pop()
-                global_memory = memories.popleft()
-                local_memory.assign_content(current_quad.result, global_memory.return_content(current_quad.left_operand))
-                memories.append(local_memory)
+                result = global_memory.return_content(current_quad.left_operand)
                 memories.appendleft(global_memory)
             else:
                 current_memory = memories.pop()
-                current_memory.assign_content(current_quad.result, current_memory.return_content(current_quad.left_operand))
+                result = current_memory.return_content(current_quad.left_operand)
+                memories.append(current_memory)
+            if check_if_global_variable(current_quad.result):
+                global_memory = memories.popleft()
+                global_memory.assign_content(current_quad.result, result)
+                memories.appendleft(global_memory)
+            else:
+                current_memory = memories.pop()
+                current_memory.assign_content(current_quad.result, result)
                 memories.append(current_memory)
             ip += 1
 
@@ -334,7 +432,6 @@ def virtual_machine(resources:str, constant_dict:str):
             print_content = result
             print(print_content)
             ip += 1
-            memories.append(current_memory)
 
         elif current_quad.op_code == 'goto':
             ip = current_quad.result
@@ -380,6 +477,18 @@ def virtual_machine(resources:str, constant_dict:str):
         elif current_quad.op_code == 'gosub':
             migajita_de_pan.append(ip+1)
             ip = current_quad.result
+        
+        elif current_quad.op_code == 'return':
+            local_memory = memories.pop()
+            global_memory = memories.popleft()
+            global_memory.assign_content(current_quad.result, local_memory.return_content(current_quad.left_operand))
+            memories.append(current_memory)
+            memories.appendleft(global_memory)
+            ip += 1
+        
+        elif current_quad.op_code == 'endfunc':
+            memories.pop() # Kill local memory
+            ip = migajita_de_pan.pop()
         
 
 

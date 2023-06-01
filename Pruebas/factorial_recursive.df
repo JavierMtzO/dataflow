@@ -1,4 +1,4 @@
-program factorial_program; 
+program recursive_factorial_program; 
 
 var int n, result;
 

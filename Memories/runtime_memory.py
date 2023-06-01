@@ -6,30 +6,30 @@ class Runtime_Memory:
     def __init__(self, resources:str, constant_dict:dict) -> None:
         # [g_i, g_f, g_c, g_b, l_i, l_f, l_c, l_b, c_i, c_f, c_c, c_b, t_i, t_f, t_c, t_b]   0 - 15
         # Convert String to list
-        print(resources)
+        # print(resources)
         self.resources = ast.literal_eval(resources)
         self.constant_dict = constant_dict
         self.define_global_memory()
         
-        print(f'global_ints_memory: {len(self.global_ints_memory)}')
-        print(f'global_floats_memory: {len(self.global_floats_memory)}')
-        print(f'global_chars_memory: {len(self.global_chars_memory)}')
-        print(f'global_bools_memory: {len(self.global_bools_memory)}')
+        # print(f'global_ints_memory: {len(self.global_ints_memory)}')
+        # print(f'global_floats_memory: {len(self.global_floats_memory)}')
+        # print(f'global_chars_memory: {len(self.global_chars_memory)}')
+        # print(f'global_bools_memory: {len(self.global_bools_memory)}')
 
-        print(f'local_ints_memory: {len(self.local_ints_memory)}')
-        print(f'local_floats_memory: {len(self.local_floats_memory)}')
-        print(f'local_chars_memory: {len(self.local_chars_memory)}')
-        print(f'local_bools_memory: {len(self.local_bools_memory)}')
+        # print(f'local_ints_memory: {len(self.local_ints_memory)}')
+        # print(f'local_floats_memory: {len(self.local_floats_memory)}')
+        # print(f'local_chars_memory: {len(self.local_chars_memory)}')
+        # print(f'local_bools_memory: {len(self.local_bools_memory)}')
 
-        print(f'constant_ints_memory: {len(self.constant_ints_memory)}')
-        print(f'constant_floats_memory: {len(self.constant_floats_memory)}')
-        print(f'constant_chars_memory: {len(self.constant_chars_memory)}')
-        print(f'constant_bools_memory: {len(self.constant_bools_memory)}')
+        # print(f'constant_ints_memory: {len(self.constant_ints_memory)}')
+        # print(f'constant_floats_memory: {len(self.constant_floats_memory)}')
+        # print(f'constant_chars_memory: {len(self.constant_chars_memory)}')
+        # print(f'constant_bools_memory: {len(self.constant_bools_memory)}')
 
-        print(f'temporal_ints_memory: {len(self.temporal_ints_memory)}')
-        print(f'temporal_floats_memory: {len(self.temporal_floats_memory)}')
-        print(f'temporal_chars_memory: {len(self.temporal_chars_memory)}')
-        print(f'temporal_bools_memory: {len(self.temporal_bools_memory)}')
+        # print(f'temporal_ints_memory: {len(self.temporal_ints_memory)}')
+        # print(f'temporal_floats_memory: {len(self.temporal_floats_memory)}')
+        # print(f'temporal_chars_memory: {len(self.temporal_chars_memory)}')
+        # print(f'temporal_bools_memory: {len(self.temporal_bools_memory)}')
         
     def define_global_memory(self):
         self.global_ints_memory = self.generate_memory_segment(self.resources[0])
