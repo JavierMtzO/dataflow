@@ -9,6 +9,7 @@ class Runtime_Memory:
         # print(resources)
         self.resources = ast.literal_eval(resources)
         self.constant_dict = constant_dict
+        self.memory_pointers = {}
         self.define_global_memory()
         
         # print(f'global_ints_memory: {len(self.global_ints_memory)}')
@@ -56,8 +57,9 @@ class Runtime_Memory:
         return [None] * size
     
     def return_content(self, virtual_address: int) -> any:
+        if virtual_address in self.memory_pointers:
+            virtual_address = self.memory_pointers[virtual_address]
         memory_categorizer = int(virtual_address / DATATYPE_SIZE)
-
         # INTS
         if memory_categorizer == 0:
             return self.global_ints_memory[virtual_address]
@@ -99,7 +101,7 @@ class Runtime_Memory:
             return self.temporal_bools_memory[virtual_address - (DATATYPE_SIZE * memory_categorizer)]
 
     
-    def assign_content_value(self, left_virtual_address: int, result:any):
+    def assign_content_value(self, left_virtual_address: int, result:any, memory_pointer:bool = False):
         memory_categorizer = int(left_virtual_address / DATATYPE_SIZE)
 
         # INTS
@@ -110,7 +112,10 @@ class Runtime_Memory:
         if memory_categorizer == 2:
             self.local_ints_memory[left_virtual_address - (DATATYPE_SIZE * memory_categorizer)] = result
         if memory_categorizer == 3:
-            self.temporal_ints_memory[left_virtual_address - (DATATYPE_SIZE * memory_categorizer)] = result
+            if memory_pointer:
+                self.memory_pointers[left_virtual_address] = result
+            else:
+                self.temporal_ints_memory[left_virtual_address - (DATATYPE_SIZE * memory_categorizer)] = result
         
         # FLOATS
         if memory_categorizer == 4:
@@ -143,6 +148,8 @@ class Runtime_Memory:
             self.temporal_bools_memory[left_virtual_address - (DATATYPE_SIZE * memory_categorizer)] = result
     
     def assign_content(self, left_virtual_address: int, right_value: any):
+        if left_virtual_address in self.memory_pointers:
+            left_virtual_address = self.memory_pointers[left_virtual_address]
         memory_categorizer = int(left_virtual_address / DATATYPE_SIZE)
 
         # INTS

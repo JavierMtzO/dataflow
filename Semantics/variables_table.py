@@ -57,10 +57,10 @@ class Functions_Directory:
 class Variables_Table:
 
     def __init__(self) -> None:
-        columns = ['Name', 'Type', 'Kind', 'Virtual Direction']
+        columns = ['Name', 'Type', 'Kind', 'Virtual Direction', 'Dimension_one', 'Dimension_two']
         self.variables_table = pd.DataFrame(columns=columns)
 
-    def push_variable(self, name: str, type: str, kind: str, virtual_direction: str) -> None:
+    def push_variable(self, name: str, type: str, kind: str, virtual_direction: str, dimension_one:int = 1, dimension_two:int = 1) -> None:
         if type not in types:
             raise Exception(f'Unknown type: "{type}"')
         if self.lookup_variable(name):
@@ -71,6 +71,8 @@ class Variables_Table:
                 'Type': type,
                 'Kind': kind,
                 'Virtual Direction': virtual_direction,
+                'Dimension_one': dimension_one,
+                'Dimension_two': dimension_two,
             }, index=[0])
         self.variables_table = pd.concat([self.variables_table, new_variable], ignore_index=True)
     
@@ -89,6 +91,12 @@ class Variables_Table:
         
     def get_type(self, name: str) -> str:
         return self.get_variable(name).iloc[0]['Type']
+    
+    def get_dimension_one(self, name: str) -> str:
+        return self.get_variable(name).iloc[0]['Dimension_one']
+    
+    def get_dimension_two(self, name: str) -> str:
+        return self.get_variable(name).iloc[0]['Dimension_two']
     
     def print_variables_table(self) -> None:
         print(self.variables_table)
@@ -135,9 +143,9 @@ class Variables_Table:
             if type == 'int':
                 if kind == 'var':
                     if is_local:
-                        local_ints += 1
+                        local_ints += 1 * row['Dimension_one'] * row['Dimension_two']
                     else:
-                        global_ints += 1
+                        global_ints += 1 * row['Dimension_one'] * row['Dimension_two']
                 if kind == 'const':
                     constant_ints += 1
                 if kind == 'temp':

@@ -71,12 +71,20 @@ def p_add_current_type(p):
     '''add_current_type : '''
     semantics.add_type(semantics.current_type, False)
 
+def p_check_for_array_length(p):
+    '''check_for_array_length : '''
+    semantics.check_for_array_length()
+
+def p_save_array(p):
+    '''save_array : '''
+    semantics.save_array()
+
 def p_VARS(p):
     '''
     VARS : VAR TIPO_COMP ID add_id TIPO_PRIME ';' save_ids
          | VAR TIPO_SIMPLE ID add_id TIPO_PRIME ';' save_ids
-         | VAR TIPO_SIMPLE ID '[' EXPRESSION ']' ';'
-         | VAR TIPO_SIMPLE ID '[' EXPRESSION ']' '[' EXPRESSION ']' ';'
+         | VAR TIPO_SIMPLE ID add_id '[' EXPRESSION ']' check_for_array_length ';' save_array
+         | VAR TIPO_SIMPLE ID add_id '[' EXPRESSION ']' check_for_array_length '[' EXPRESSION ']' check_for_array_length ';'
     '''
     pass
 
@@ -91,10 +99,14 @@ def p_get_variable(p):
     '''get_variable : '''
     semantics.get_variable(p[-1])
 
+def p_ver_quad_dimension_one(p):
+    '''ver_quad_dimension_one : '''
+    semantics.ver_quad_dimension_one()
+
 def p_VARIABLE(p):
     '''
     VARIABLE : ID get_variable
-             | ID '[' EXPRESSION ']'
+             | ID add_id '[' EXPRESSION ']' ver_quad_dimension_one
     '''
     pass
 
@@ -424,6 +436,8 @@ def p_VAR_CT(p):
            | F_CONST add_operand
            | C_CONST add_operand
            | FUNC_CALL
+           | ID add_id '[' EXPRESSION ']' ver_quad_dimension_one
+           | ID add_id '[' EXPRESSION ']' ver_quad_dimension_one '[' EXPRESSION ']'
     '''
     pass
 

@@ -331,8 +331,6 @@ def virtual_machine(resources:str, constant_dict:str):
                 
             current_memory = memories.pop()
             result = left_operand == right_operand
-            # if len(migajita_de_pan) > 2 and right_operand == 1:
-            #     import pdb; pdb.set_trace()
             current_memory.assign_content_value(current_quad.result, result)
             ip += 1
             memories.append(current_memory)
@@ -489,6 +487,25 @@ def virtual_machine(resources:str, constant_dict:str):
         elif current_quad.op_code == 'endfunc':
             memories.pop() # Kill local memory
             ip = migajita_de_pan.pop()
+        
+        elif current_quad.op_code == 'ver':
+            current_memory = memories.popleft()
+            index = current_memory.return_content(current_quad.left_operand)
+            lower_bound = current_quad.right_operand
+            upper_bound = current_quad.result
+            if index >= lower_bound and index <= upper_bound:
+                ip += 1
+            else:
+                raise Exception(f'Index {index} out of bounds. Range should be {lower_bound} - {upper_bound}')
+            memories.append(current_memory)
+        
+        elif current_quad.op_code == 'base_sum':
+            current_memory = memories.pop()
+            left_operand = current_memory.return_content(current_quad.left_operand)
+            result = left_operand + current_quad.right_operand
+            current_memory.assign_content_value(current_quad.result, result, memory_pointer= True)
+            ip += 1
+            memories.append(current_memory)
         
 
 

@@ -90,6 +90,50 @@ class Semantics:
                 virtual_direction = self.virtual_memory.assign_virtual_address(type=type, is_global=True)
                 self.global_variables_table.push_variable(name= name, type= type, kind='var', virtual_direction=virtual_direction)
     
+    def check_for_array_length(self) -> None:
+        exp_type = self.types_stack.pop()
+        if exp_type != 'int':
+            raise Exception(f'Array size must be an integer!')
+    
+    def save_array(self) -> None:
+        name = self.id_queue.pop()
+        array_type = self.types_stack.pop()
+        first_dimension = int(self.operands_stack.pop())
+        if self.current_scope == "local":
+                virtual_direction = self.virtual_memory.assign_virtual_address(type=array_type, is_global=False, size=first_dimension)
+                self.local_variables_table.push_variable(name= name, type= array_type, kind='var', virtual_direction=virtual_direction, dimension_one=first_dimension)
+        elif self.current_scope == "global":
+            virtual_direction = self.virtual_memory.assign_virtual_address(type=array_type, is_global=True, size=first_dimension)
+            self.global_variables_table.push_variable(name= name, type= array_type, kind='var', virtual_direction=virtual_direction, dimension_one=first_dimension)
+    
+    def ver_quad_dimension_one(self) -> None:
+        name = self.id_queue.pop()
+        number = self.operands_stack.pop()
+        operator = 'ver'
+
+        temporal_variable = f"b{self.temp_variables_counter}"
+        temp_var_type = 'int'
+        self.temp_variables[temporal_variable] = temporal_variable
+        virtual_direction = self.virtual_memory.assign_virtual_address(type=temp_var_type, is_temp=True)
+        self.temp_variables_counter += 1
+
+        if self.current_scope == "local":
+            number_vm = self.local_variables_table.get_virtual_memory(name=number)
+            dimension_one = int(self.local_variables_table.get_dimension_one(name=name))
+            base_vm = self.local_variables_table.get_virtual_memory(name=name)
+            self.local_variables_table.push_variable(name=temporal_variable, type=temp_var_type, kind='temp', virtual_direction=virtual_direction)
+        elif self.current_scope == "global":
+            number_vm = self.global_variables_table.get_virtual_memory(name=number)
+            dimension_one = int(self.global_variables_table.get_dimension_one(name=name))
+            base_vm = self.global_variables_table.get_virtual_memory(name=name)
+            self.global_variables_table.push_variable(name=temporal_variable, type=temp_var_type, kind='temp', virtual_direction=virtual_direction)
+        quadruple = Quadruple(operation=operator, left_operand=number_vm, right_operand=0, result=dimension_one -1)
+        self.append_quad(quadruple)
+        quadruple = Quadruple(operation='base_sum', left_operand=number_vm, right_operand=base_vm, result=virtual_direction)
+        self.append_quad(quadruple)
+        self.operands_stack.append(temporal_variable)
+
+    
     def save_function(self) -> None:
         name = self.id_queue.pop()
         type = self.types_stack.pop()
@@ -352,6 +396,7 @@ class Semantics:
             print("Global Variables Table: ")
             self.global_variables_table.print_variables_table()
             self.global_variables_table.empty_variables_table()
+            print(self.final_global_mem)
             self.end_program()
     
     def era_quad(self, current_function:str) -> None:

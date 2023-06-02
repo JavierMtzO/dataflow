@@ -11,6 +11,8 @@ quadruple_operations = operations | {
     'param': 'param',
     'return': 'return',
     'endprogram':'endprogram',
+    'ver':'ver',
+    'base_sum':'base_sum'
 
 }
 

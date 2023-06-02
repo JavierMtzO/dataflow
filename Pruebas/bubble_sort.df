@@ -1,0 +1,32 @@
+program bubble_sort_program; 
+
+var int i, j, temp;
+var int arreglo[6];
+void main {
+    arreglo[0] = 2;
+    arreglo[1] = 4;
+    arreglo[2] = 5;
+    arreglo[3] = 3;
+    arreglo[4] = 6;
+    arreglo[5] = 1;
+
+    for i = 0 to (5) do {
+        for j = 0 to (5 - i) do {
+            if (j + 1 < 6) {
+                if (arreglo[j] > arreglo[j + 1]) {
+                    temp = arreglo[j] ;
+                    arreglo[j] = arreglo[j + 1] ;
+                    arreglo[j + 1] = temp ;
+                }
+            }
+            j = j + 1 ;
+        }
+        i = i + 1 ;
+    }
+    print(arreglo[0]);
+    print(arreglo[1]);
+    print(arreglo[2]);
+    print(arreglo[3]);
+    print(arreglo[4]);
+    print(arreglo[5]);
+}
