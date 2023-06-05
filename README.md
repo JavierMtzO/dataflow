@@ -99,24 +99,24 @@ void main {
 }
 ```
 ### Cubo semántico
-|  left operator |  right operator |   =   |   +   |   -   |   *   |   /   |
+|  left operator |  right operator |   =   |   +   |   -   |   *   |   /   |    >   |    <   |    ==   |    !=   |    &&   |    ||   |
 |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
-|  int  |  int  |  int  |  int  |  int  |  int  |  int  |
-|  int  | float | ERROR | float | float | float | float |
-|  int  |  char | ERROR | char | ERROR | ERROR | ERROR |
-|  int  |  bool | ERROR | ERROR | ERROR | ERROR | ERROR |
-| float |  int  | float | float | float | float | float |
-| float | float | float | float | float | float | float |
-| float |  char | ERROR | ERROR | ERROR | ERROR | ERROR |
-| float |  bool | ERROR | ERROR | ERROR | ERROR | ERROR |
-|  char |  int  | ERROR | ERROR | ERROR | ERROR | ERROR |
-|  char | float | ERROR | ERROR | ERROR | ERROR | ERROR |
-|  char |  char |  char |  char | ERROR | ERROR | ERROR |
-|  char |  bool | ERROR | ERROR | ERROR | ERROR | ERROR |
-|  bool |  int  | ERROR | ERROR | ERROR | ERROR | ERROR |
-|  bool | float | ERROR | ERROR | ERROR | ERROR | ERROR |
-|  bool |  char | ERROR | ERROR | ERROR | ERROR | ERROR |
-|  bool |  bool |  bool | ERROR | ERROR | ERROR | ERROR |
+|  int  |  int  |  int  |  int  |  int  |  int  |  int  | bool | bool | bool | bool | ERROR | ERROR |
+|  int  | float | ERROR | float | float | float | float | bool | bool | bool | bool | ERROR | ERROR |
+|  int  |  char | ERROR | char | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
+|  int  |  bool | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
+| float |  int  | float | float | float | float | float | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
+| float | float | float | float | float | float | float | bool | bool | bool | bool | ERROR | ERROR |
+| float |  char | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
+| float |  bool | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
+|  char |  int  | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
+|  char | float | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
+|  char |  char |  char |  char | ERROR | ERROR | ERROR | ERROR | ERROR | bool | bool | ERROR | ERROR |
+|  char |  bool | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
+|  bool |  int  | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
+|  bool | float | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
+|  bool |  char | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
+|  bool |  bool |  bool | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | bool | bool | bool | bool |
 
 ### Escritura
 Dataflow imprime valores en la consola utilizando la palabra clave `print()`.
@@ -222,7 +222,7 @@ void main {
 
 ```
 program print_matrix;
- 
+
 var int matrix_one[3][3];
 var int matrix_two[3][3];
 void main {
@@ -236,3 +236,4 @@ void main {
     }
 }
 ```
+
