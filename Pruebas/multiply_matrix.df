@@ -1,4 +1,4 @@
-program patito; 
+program multiply_matrix; 
 
 var int matrix_one[3][3];
 var int matrix_two[3][3];
