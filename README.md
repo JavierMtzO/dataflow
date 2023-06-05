@@ -3,7 +3,7 @@ DataFlow is a compiler for a data science language implemented using PLY (Python
 
 ## Manual de usuario
 ### Dependencias y ejecución
-Para in
+Para instalar las dependencias hacer lo siguiente
 ```
 pip install ply
 pip install pandas
