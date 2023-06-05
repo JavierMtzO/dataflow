@@ -99,13 +99,14 @@ void main {
 }
 ```
 ### Cubo semántico
+### Cubo semántico
 |  left operator |  right operator |   =   |   +   |   -   |   *   |   /   |    >   |    <   |    ==   |    !=   |    &&   |    ||   |
-|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 |  int  |  int  |  int  |  int  |  int  |  int  |  int  | bool | bool | bool | bool | ERROR | ERROR |
-|  int  | float | ERROR | float | float | float | float | bool | bool | bool | bool | ERROR | ERROR |
-|  int  |  char | ERROR | char | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
+|  int  | float | ERROR | float | float | float | float | bool | bool | ERROR | ERROR | ERROR | ERROR |
+|  int  |  char | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
 |  int  |  bool | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
-| float |  int  | float | float | float | float | float | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
+| float |  int  | float | float | float | float | float | bool | bool | ERROR | ERROR | ERROR | ERROR |
 | float | float | float | float | float | float | float | bool | bool | bool | bool | ERROR | ERROR |
 | float |  char | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
 | float |  bool | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
@@ -113,10 +114,11 @@ void main {
 |  char | float | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
 |  char |  char |  char |  char | ERROR | ERROR | ERROR | ERROR | ERROR | bool | bool | ERROR | ERROR |
 |  char |  bool | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
-|  bool |  int  | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
-|  bool | float | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
-|  bool |  char | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
+|  bool |  int  | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | bool | bool |
+|  bool | float | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | bool | bool |
+|  bool |  char | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | bool | bool |
 |  bool |  bool |  bool | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | bool | bool | bool | bool |
+
 
 ### Escritura
 Dataflow imprime valores en la consola utilizando la palabra clave `print()`.
