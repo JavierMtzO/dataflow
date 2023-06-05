@@ -23,11 +23,11 @@ class VirtualMemory():
     temp_int_init = temp_int_range[0]
 
     # Float ranges
-    global_float_range = [FLOAT_START, FLOAT_START + DATATYPE_SIZE - 1]
+    global_float_range = [FLOAT_START, FLOAT_START + DATATYPE_SIZE - 1] #20,000 24,999
     global_float_counter = global_float_range[0]
-    constant_float_range = [FLOAT_START + DATATYPE_SIZE, FLOAT_START + (DATATYPE_SIZE * 2) - 1]
+    constant_float_range = [FLOAT_START + DATATYPE_SIZE, FLOAT_START + (DATATYPE_SIZE * 2) - 1] #25,000 29,999
     constant_float_counter = constant_float_range[0]
-    local_float_range = [FLOAT_START + (DATATYPE_SIZE * 2), FLOAT_START + (DATATYPE_SIZE * 3) - 1]
+    local_float_range = [FLOAT_START + (DATATYPE_SIZE * 2), FLOAT_START + (DATATYPE_SIZE * 3) - 1] #30,000 34,999
     local_float_init = local_float_range[0]
     local_float_parameter = local_float_range[0]
     local_float_counter = local_float_range[0]

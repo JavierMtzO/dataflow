@@ -1,0 +1,23 @@
+program find_program; 
+
+var int arreglo[6];
+var int number_to_find, i, auxiliar;
+
+void main {
+    for i = 0 to (5) do {
+        arreglo[i] = i * i;
+        i = i + 1;
+    }
+    auxiliar = -1;
+    number_to_find = 1;
+
+    for i = 0 to (5) do {
+        if(arreglo[i] == number_to_find) {
+            auxiliar = i;
+        }
+        i = i + 1;
+    }
+
+    print(auxiliar > 0);
+}
+

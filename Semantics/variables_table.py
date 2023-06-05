@@ -153,9 +153,9 @@ class Variables_Table:
             elif type == 'float':
                 if kind == 'var':
                     if is_local:
-                        local_floats += 1
+                        local_floats += 1 * row['Dimension_one'] * row['Dimension_two']
                     else:
-                        global_floats += 1
+                        global_floats += 1 * row['Dimension_one'] * row['Dimension_two']
                 if kind == 'const':
                     constant_floats += 1
                 if kind == 'temp':
@@ -163,9 +163,9 @@ class Variables_Table:
             elif type == 'char':
                 if kind == 'var':
                     if is_local:
-                        local_chars += 1
+                        local_chars += 1 * row['Dimension_one'] * row['Dimension_two']
                     else:
-                        global_chars += 1
+                        global_chars += 1 * row['Dimension_one'] * row['Dimension_two']
                 if kind == 'const':
                     constant_chars += 1
                 if kind == 'temp':
@@ -173,9 +173,9 @@ class Variables_Table:
             elif type == 'bool':
                 if kind == 'var':
                     if is_local:
-                        local_booleans += 1
+                        local_booleans += 1 * row['Dimension_one'] * row['Dimension_two']
                     else:
-                        global_booleans += 1
+                        global_booleans += 1 * row['Dimension_one'] * row['Dimension_two']
                 if kind == 'const':
                     constant_booleans += 1
                 if kind == 'temp':

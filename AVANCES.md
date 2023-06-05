@@ -107,5 +107,41 @@
     Máquina Virtual - Ya procesa if, while y for.
 
     Máquina Virtual - Se ha empezado la generación de funciones, aún no está lista.
+
+- **Fecha:** 01/Junio/2023
+
+- **Descripción:** Generar código para la implementación de funciones en máquina virtual.
+
+- **Estado:**
+
+    Máquina Virtual - Procesa Funciones.
+
+    Máquina Virtual - Procesa funciones recursivas.
+
+- **Fecha:** 02/Junio/2023
+
+- **Descripción:** Generar código para la implementación de arreglos en máquina virtual.
+
+- **Estado:**
+
+    Máquina Virtual - Procesa Arreglos.
+
+- **Fecha:** 01/Junio/2023
+
+- **Descripción:** Generar código para la implementación de funciones en máquina virtual.
+
+- **Estado:**
+
+    Máquina Virtual - Procesa Funciones.
+
+    Máquina Virtual - Procesa funciones recursivas.
+
+- **Fecha:** 04/Junio/2023
+
+- **Descripción:** Generar código para la implementación de matrices en máquina virtual.
+
+- **Estado:**
+
+    Máquina Virtual - Procesa Matrices.
     
 <br>
