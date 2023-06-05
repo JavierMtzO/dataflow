@@ -9,6 +9,39 @@ from Semantics.variables_table import Functions_Directory, Variables_Table
 
 
 class Semantics:
+
+    """
+    This class represents the Semantics rules for Dataflow, which are responsible for executing semantic actions 
+    during the compilation process. This class contains methods for performing various operations related to 
+    type checking, generating quadruples, managing variables and functions, and handling control flow.
+
+    Attributes:
+    - operands_stack: A stack to store operands during semantic analysis.
+    - operators_stack: A stack to store operators during semantic analysis.
+    - types_stack: A stack to store types during semantic analysis.
+    - jumps_stack: A stack to store jump targets during semantic analysis.
+    - id_queue: A queue to store identifiers during semantic analysis.
+    - functions_directory: An instance of the Functions_Directory class to manage function-related information.
+    - semantic_cube: An instance of the Semantic_Cube class to handle type compatibility and result types for different operations.
+    - temp_variables: A dictionary to store temporary variables generated during semantic analysis.
+    - temp_variables_counter: A counter to keep track of the number of temporary variables generated.
+    - quadruple_counter: A counter to keep track of the number of quadruples generated.
+    - quadruples: A list to store the generated quadruples.
+    - for_vc_stack: A stack to store the variable counter for a 'for' loop during semantic analysis.
+    - for_vf_stack: A stack to store the variable final value for a 'for' loop during semantic analysis.
+    - temp_for_counter: A counter to keep track of the number of temporary variables generated for a 'for' loop.
+    - current_scope: A string to indicate the current scope (either "global" or "local").
+    - parameters_list: A list to store the parameters of a function during semantic analysis.
+    - era_stack: A stack to store the indices of 'era' quadruples during semantic analysis.
+    - global_variables_table: An instance of the Variables_Table class to manage global variables.
+    - local_variables_table: An instance of the Variables_Table class to manage local variables.
+    - final_global_mem: A string to store the final representation of the global memory.
+    - final_global_constant_dict: A dictionary to store the final representation of the global constants.
+    - virtual_memory: An instance of the VirtualMemory class to manage the virtual memory allocation.
+
+    Methods:
+    - All semantic rules.
+    """
     operands_stack = deque()
     operators_stack = deque()
     types_stack = deque()

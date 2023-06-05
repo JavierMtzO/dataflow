@@ -4,6 +4,12 @@ from Semantics.semantics import Semantics
 
 semantics = Semantics()
 
+"""
+This file defines the syntax and semantics for a 
+Dataflow language using the PLY (Python Lex-Yacc) library.
+
+"""
+
 def p_PROGRAM(p):
     '''
     PROGRAM : PROG add_type ID add_id ';' go_to_main save_function VARS_PRIME FUNCTION_PRIME VOID MAIN '{' fill_go_to_main_quad VARS_PRIME BLOCK '}' empty_global_variables_table

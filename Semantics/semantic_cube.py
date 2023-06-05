@@ -28,6 +28,18 @@ operations = {
 
 class Semantic_Cube():
 
+    """
+    Class: Semantic_Cube
+    
+    Represents a semantic cube for performing type matching in a dataflow language.
+
+    Attributes:
+        semantic_cube (dict): The semantic cube for storing type matching rules.
+
+    Methods:
+        match_types(left_operand, right_operand, operator): Matches the types of the left and right operands with the given operator.
+    """
+
     semantic_cube = {
         'int': {
             'int': {

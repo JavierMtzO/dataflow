@@ -8,6 +8,84 @@ CHAR_START = FLOAT_START + DATATYPE_SIZE * 4
 BOOL_START = CHAR_START + DATATYPE_SIZE * 4
 
 class VirtualMemory():
+    """
+    Class: VirtualMemory
+
+    This class manages the allocation of virtual memory addresses for different data types in a simulated environment.
+
+    Attributes:
+    - global_int_range: A list representing the range of addresses for global integers.
+    - global_int_counter: An integer representing the current counter for global integers.
+    - constant_int_range: A list representing the range of addresses for constant integers.
+    - constant_int_counter: An integer representing the current counter for constant integers.
+    - local_int_range: A list representing the range of addresses for local integers.
+    - local_int_init: An integer representing the initial counter for local integers.
+    - local_int_parameter: An integer representing the counter for local integer parameters.
+    - local_int_counter: An integer representing the current counter for local integers.
+    - temp_int_range: A list representing the range of addresses for temporary integers.
+    - temp_int_counter: An integer representing the current counter for temporary integers.
+    - temp_int_init: An integer representing the initial counter for temporary integers.
+    - global_float_range: A list representing the range of addresses for global floats.
+    - global_float_counter: An integer representing the current counter for global floats.
+    - constant_float_range: A list representing the range of addresses for constant floats.
+    - constant_float_counter: An integer representing the current counter for constant floats.
+    - local_float_range: A list representing the range of addresses for local floats.
+    - local_float_init: An integer representing the initial counter for local floats.
+    - local_float_parameter: An integer representing the counter for local float parameters.
+    - local_float_counter: An integer representing the current counter for local floats.
+    - temp_float_range: A list representing the range of addresses for temporary floats.
+    - temp_float_counter: An integer representing the current counter for temporary floats.
+    - temp_float_init: An integer representing the initial counter for temporary floats.
+    - global_char_range: A list representing the range of addresses for global characters.
+    - global_char_counter: An integer representing the current counter for global characters.
+    - constant_char_range: A list representing the range of addresses for constant characters.
+    - constant_char_counter: An integer representing the current counter for constant characters.
+    - local_char_range: A list representing the range of addresses for local characters.
+    - local_char_init: An integer representing the initial counter for local characters.
+    - local_char_parameter: An integer representing the counter for local character parameters.
+    - local_char_counter: An integer representing the current counter for local characters.
+    - temp_char_range: A list representing the range of addresses for temporary characters.
+    - temp_char_counter: An integer representing the current counter for temporary characters.
+    - temp_char_init: An integer representing the initial counter for temporary characters.
+    - global_bool_range: A list representing the range of addresses for global booleans.
+    - global_bool_counter: An integer representing the current counter for global booleans.
+    - constant_bool_range: A list representing the range of addresses for constant booleans.
+    - constant_bool_counter: An integer representing the current counter for constant booleans.
+    - local_bool_range: A list representing the range of addresses for local booleans.
+    - local_bool_init: An integer representing the initial counter for local booleans.
+    - local_bool_parameter: An integer representing the counter for local boolean parameters.
+    - local_bool_counter: An integer representing the current counter for local booleans.
+    - temp_bool_range: A list representing the range of addresses for temporary booleans.
+    - temp_bool_counter: An integer representing the current counter for temporary booleans.
+    - temp_bool_init: An integer representing the initial counter for temporary booleans.
+
+    Methods:
+    - assign_global_address_int: Assigns a global address for integers.
+    - assign_global_address_float: Assigns a global address for floats.
+    - assign_global_address_char: Assigns a global address for characters.
+    - assign_global_address_bool: Assigns a global address for booleans.
+    - restart_local_memory: Restarts the counters for local memory addresses.
+    - restart_parameters: Restarts the counters for parameter addresses.
+    - assign_constant_address_int: Assigns a constant address for integers.
+    - assign_constant_address_float: Assigns a constant address for floats.
+    - assign_constant_address_char: Assigns a constant address for characters.
+    - assign_constant_address_bool: Assigns a constant address for booleans.
+    - assign_temp_address_int: Assigns a temporary address for integers.
+    - assign_temp_address_float: Assigns a temporary address for floats.
+    - assign_temp_address_char: Assigns a temporary address for characters.
+    - assign_temp_address_bool: Assigns a temporary address for booleans.
+    - assign_local_address_int: Assigns a local address for integers.
+    - assign_local_address_float: Assigns a local address for floats.
+    - assign_local_address_char: Assigns a local address for characters.
+    - assign_local_address_bool: Assigns a local address for booleans.
+    - assign_parameter_address_int: Assigns a parameter address for integers.
+    - assign_parameter_address_float: Assigns a parameter address for floats.
+    - assign_parameter_address_char: Assigns a parameter address for characters.
+    - assign_parameter_address_bool: Assigns a parameter address for booleans.
+    - assign_virtual_address: Assigns a virtual address based on the data type, constancy, and scope.
+    - assign_virtual_address_parameter: Assigns a virtual address for a parameter based on the data type.
+
+    """
 
     # Int ranges
     global_int_range = [INT_START, INT_START + DATATYPE_SIZE - 1] # 0 4,999

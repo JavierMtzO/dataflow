@@ -1,5 +1,9 @@
 import ply.lex as lex
 # Reserved words
+
+"""
+This code defines a lexer for a dataflow language.
+"""
 reserved = {
     'program': 'PROG',
     'var': 'VAR',

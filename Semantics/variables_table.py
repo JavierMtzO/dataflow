@@ -2,6 +2,31 @@ import pandas as pd
 from Semantics.semantic_cube import types, function_types
 
 class Functions_Directory:
+    """
+    Class: Functions_Directory
+
+    This class represents a directory for storing information about functions in a program. 
+    It maintains a DataFrame to store details about each function, such as its name, type, directory, 
+    parameters, and variables types used.
+
+    Attributes:
+    - functions_directory (pd.DataFrame): A DataFrame to store information about functions.
+
+    Methods:
+    - __init__(self): Initializes the Functions_Directory object.
+    - push_function(self, name: str, type: str, dir: int = None): Adds a new function to the directory with the specified name, type, and directory.
+    - lookup_function(self, name: str) -> bool: Checks if a function with the given name exists in the directory.
+    - get_type(self, name: str) -> str: Retrieves the type of the function with the specified name.
+    - get_name(self, name: str) -> str: Retrieves the name of the function with the specified name.
+    - get_variables_types_used(self, name: str) -> str: Retrieves the variables types used by the function with the specified name.
+    - get_parameters(self, name: str) -> str: Retrieves the parameters of the function with the specified name.
+    - get_dir(self, name: str) -> str: Retrieves the directory of the function with the specified name.
+    - get_current_function(self, name: str = None) -> pd.DataFrame: Retrieves the DataFrame containing information about the function with the specified name.
+    - push_variables_types_used(self, name: str, types_array: str): Adds the variables types used by the function with the specified name.
+    - push_parameters(self, name: str, parameters_list: str): Adds the parameters of the function with the specified name.
+    - print_functions_directory(self): Prints the functions directory.
+    """
+
     def __init__(self) -> None:
         columns = ['Name', 'Type', 'Dir', 'Parameters','Variables types used']
         self.functions_directory = pd.DataFrame(columns=columns)
@@ -55,6 +80,30 @@ class Functions_Directory:
         print('')
 
 class Variables_Table:
+    """
+    Class: Variables_Table
+
+    This class represents a table for storing information about variables in a program. 
+    It maintains a DataFrame to store details about each variable, such as its name, type, 
+    kind, virtual direction, and dimensions.
+
+    Attributes:
+    - variables_table (pd.DataFrame): A DataFrame to store information about variables.
+
+    Methods:
+    - __init__(self): Initializes the Variables_Table object.
+    - push_variable(self, name: str, type: str, kind: str, virtual_direction: str, dimension_one: int = 1, dimension_two: int = 1): Adds a new variable to the table with the specified details.
+    - lookup_variable(self, name: str) -> bool: Checks if a variable with the given name exists in the table.
+    - get_variable(self, name: str, is_vm: bool = False) -> pd.DataFrame: Retrieves the variable with the specified name as a DataFrame.
+    - get_type(self, name: str) -> str: Retrieves the type of the variable with the specified name.
+    - get_dimension_one(self, name: str) -> str: Retrieves the value of the first dimension of the variable with the specified name.
+    - get_dimension_two(self, name: str) -> str: Retrieves the value of the second dimension of the variable with the specified name.
+    - print_variables_table(self): Prints the variables table.
+    - get_virtual_memory(self, name: str) -> int: Retrieves the virtual memory address of the variable with the specified name.
+    - get_constant_dict(self) -> dict: Retrieves a dictionary of constant variables and their virtual memory addresses.
+    - get_types_counter_list(self, is_local: bool = False) -> str: Retrieves a list of counters for each variable type.
+    - empty_variables_table(self): Clears the variables table.
+    """
 
     def __init__(self) -> None:
         columns = ['Name', 'Type', 'Kind', 'Virtual Direction', 'Dimension_one', 'Dimension_two']

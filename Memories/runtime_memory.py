@@ -2,35 +2,32 @@ from Memories.virtual_memory import DATATYPE_SIZE, VirtualMemory
 import ast
 
 class Runtime_Memory:
+    """
+    Class: Runtime_Memory
+
+    This class represents the runtime memory of a program. It manages different memory segments for storing variables of different data types such as integers, 
+    floats, characters, and booleans. It also handles memory pointers and provides methods for accessing and assigning values in the memory.
+
+    Attributes:
+    - resources (str): A string representation of the available memory resources.
+    - constant_dict (dict): A dictionary containing constant values.
+    - memory_pointers (dict): A dictionary that maps memory addresses to their respective pointers.
+
+    Methods:
+    - __init__(self, resources: str, constant_dict: dict): Initializes the Runtime_Memory object with the given resources and constant dictionary.
+    - define_global_memory(self): Creates and initializes the global memory segments.
+    - generate_memory_segment(self, size: int): Generates a memory segment of the specified size.
+    - return_content(self, virtual_address: int) -> any: Retrieves the content at the specified virtual address in the memory.
+    - assign_content_value(self, left_virtual_address: int, result: any, memory_pointer: bool = False): Assigns a value to the specified virtual address in the memory.
+    - assign_content(self, left_virtual_address: int, right_value: any): Assigns the value of `right_value` to the specified virtual address in the memory.
+    """
 
     def __init__(self, resources:str, constant_dict:dict) -> None:
-        # [g_i, g_f, g_c, g_b, l_i, l_f, l_c, l_b, c_i, c_f, c_c, c_b, t_i, t_f, t_c, t_b]   0 - 15
         # Convert String to list
-        # print(resources)
         self.resources = ast.literal_eval(resources)
         self.constant_dict = constant_dict
         self.memory_pointers = {}
         self.define_global_memory()
-        
-        # print(f'global_ints_memory: {len(self.global_ints_memory)}')
-        # print(f'global_floats_memory: {len(self.global_floats_memory)}')
-        # print(f'global_chars_memory: {len(self.global_chars_memory)}')
-        # print(f'global_bools_memory: {len(self.global_bools_memory)}')
-
-        # print(f'local_ints_memory: {len(self.local_ints_memory)}')
-        # print(f'local_floats_memory: {len(self.local_floats_memory)}')
-        # print(f'local_chars_memory: {len(self.local_chars_memory)}')
-        # print(f'local_bools_memory: {len(self.local_bools_memory)}')
-
-        # print(f'constant_ints_memory: {len(self.constant_ints_memory)}')
-        # print(f'constant_floats_memory: {len(self.constant_floats_memory)}')
-        # print(f'constant_chars_memory: {len(self.constant_chars_memory)}')
-        # print(f'constant_bools_memory: {len(self.constant_bools_memory)}')
-
-        # print(f'temporal_ints_memory: {len(self.temporal_ints_memory)}')
-        # print(f'temporal_floats_memory: {len(self.temporal_floats_memory)}')
-        # print(f'temporal_chars_memory: {len(self.temporal_chars_memory)}')
-        # print(f'temporal_bools_memory: {len(self.temporal_bools_memory)}')
         
     def define_global_memory(self):
         self.global_ints_memory = self.generate_memory_segment(self.resources[0])
