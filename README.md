@@ -99,8 +99,7 @@ void main {
 }
 ```
 ### Cubo semántico
-### Cubo semántico
-|  left operator |  right operator |   =   |   +   |   -   |   *   |   /   |    >   |    <   |    ==   |    !=   |    &&   |    ||   |
+|  left operator |  right operator |   =   |   +   |   -   |   *   |   /   |    >   |    <   |    ==   |    !=   |    &&   |    \|\|   |
 |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 |  int  |  int  |  int  |  int  |  int  |  int  |  int  | bool | bool | bool | bool | ERROR | ERROR |
 |  int  | float | ERROR | float | float | float | float | bool | bool | ERROR | ERROR | ERROR | ERROR |
@@ -112,12 +111,13 @@ void main {
 | float |  bool | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
 |  char |  int  | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
 |  char | float | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
-|  char |  char |  char |  char | ERROR | ERROR | ERROR | ERROR | ERROR | bool | bool | ERROR | ERROR |
+|  char |  char |  char | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | bool | bool | ERROR | ERROR |
 |  char |  bool | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
-|  bool |  int  | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | bool | bool |
-|  bool | float | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | bool | bool |
-|  bool |  char | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | bool | bool |
+|  bool |  int  | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
+|  bool | float | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
+|  bool |  char | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR |
 |  bool |  bool |  bool | ERROR | ERROR | ERROR | ERROR | ERROR | ERROR | bool | bool | bool | bool |
+
 
 
 ### Escritura
